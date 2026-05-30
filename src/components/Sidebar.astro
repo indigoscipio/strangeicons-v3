@@ -1,0 +1,176 @@
+---
+interface Props {
+  families: string[];
+  styles: string[];
+}
+const { families, styles } = Astro.props;
+---
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-brand">
+    <span class="brand-mark">✦</span>
+    <span class="brand-name">strangeicons</span>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <div class="nav-section">
+      <span class="nav-label">Library</span>
+      <ul class="nav-list" id="family-list">
+        {families.map((family, i) => (
+          <li>
+            <button
+              class={`nav-item ${i === 0 ? 'active' : ''}`}
+              data-filter="family"
+              data-value={family}
+            >
+              <span class="nav-item-dot"></span>
+              {family}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-label">Style</span>
+      <ul class="nav-list" id="style-list">
+        {styles.map((style) => (
+          <li>
+            <button class="nav-item" data-filter="style" data-value={style}>
+              <span class="nav-item-dot"></span>
+              {style}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <span id="icon-count" class="count-badge">— icons</span>
+  </div>
+
+</aside>
+
+<style>
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    z-index: 10;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand-mark {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+
+  .nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .nav-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-align: left;
+    transition: background 0.12s, color 0.12s;
+    text-transform: capitalize;
+  }
+
+  .nav-item:hover {
+    background: var(--bg);
+    color: var(--text-primary);
+  }
+
+  .nav-item.active {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .nav-item-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background 0.12s;
+  }
+
+  .nav-item.active .nav-item-dot,
+  .nav-item:hover .nav-item-dot {
+    background: var(--text-primary);
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .count-badge {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-subtle);
+  }
+</style>
