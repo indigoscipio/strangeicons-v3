@@ -2,6 +2,13 @@
 ---
 
 <header class="topbar">
+  <!-- Hamburger — mobile only -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+
   <div class="search-wrap">
     <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
@@ -37,6 +44,25 @@
     padding: 0 24px;
     z-index: 9;
     gap: 16px;
+    transition: left 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hamburger button — hidden on desktop */
+  .menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  .menu-toggle:hover {
+    background: var(--surface);
+    color: var(--text-primary);
   }
 
   .search-wrap {
@@ -50,6 +76,7 @@
     height: 36px;
     width: 280px;
     transition: border-color 0.15s;
+    flex-shrink: 0;
   }
 
   .search-wrap:focus-within {
@@ -68,6 +95,7 @@
     outline: none;
     font-size: 13px;
     color: var(--text-primary);
+    min-width: 0;
   }
 
   #search-input::placeholder {
@@ -83,6 +111,7 @@
     border-radius: 3px;
     padding: 1px 5px;
     line-height: 1.4;
+    flex-shrink: 0;
   }
 
   .search-wrap:focus-within .search-shortcut {
@@ -93,6 +122,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-left: auto;
   }
 
   .result-count {
@@ -100,5 +130,28 @@
     font-family: var(--font-mono);
     color: var(--text-subtle);
     white-space: nowrap;
+  }
+
+  /* ── Mobile ─────────────────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .topbar {
+      left: 0;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+
+    .search-wrap {
+      width: auto;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .result-count {
+      display: none;
+    }
   }
 </style>

@@ -2,9 +2,9 @@
 ---
 
 <main class="main-content">
-  <div class="grid-wrap">
+  <div class="grid-wrap" id="grid-wrap">
     <div class="icon-grid" id="icon-grid">
-      <!-- Populated by app.js -->
+      <!-- Populated by app.js virtual scroller -->
     </div>
     <div class="empty-state" id="empty-state" style="display:none;">
       <span class="empty-icon">⊘</span>
@@ -14,7 +14,7 @@
   </div>
 </main>
 
-<!-- Icon detail panel (copy / download) -->
+<!-- Icon detail panel -->
 <div class="detail-panel" id="detail-panel" style="display:none;">
   <div class="panel-backdrop" id="panel-backdrop"></div>
   <div class="panel-card">
@@ -42,19 +42,22 @@
     margin-left: var(--sidebar-w);
     padding-top: var(--topbar-h);
     min-height: 100vh;
+    transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .grid-wrap {
     padding: 28px 24px;
   }
 
+  /* Grid uses absolute positioning for virtual scroll children */
   .icon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
     gap: 6px;
+    position: relative; /* children use absolute positioning */
   }
 
-  /* Icon cards — rendered by JS but styled here */
+  /* Icon cards — rendered by JS */
   :global(.icon-card) {
     display: flex;
     flex-direction: column;
@@ -68,11 +71,14 @@
     cursor: pointer;
     transition: border-color 0.12s, box-shadow 0.12s, transform 0.1s;
     min-height: 88px;
+    height: 94px; /* fixed height for virtual scroll accuracy */
+    content-visibility: auto;
+    contain-intrinsic-size: 94px;
   }
 
   :global(.icon-card:hover) {
     border-color: var(--border-hover);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transform: translateY(-1px);
   }
 
@@ -81,7 +87,8 @@
     border-color: #86efac;
   }
 
-  :global(.icon-card svg) {
+  :global(.icon-card svg),
+  :global(.icon-card img) {
     width: 28px;
     height: 28px;
     flex-shrink: 0;
@@ -135,7 +142,7 @@
   .panel-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.18);
+    background: rgba(0, 0, 0, 0.18);
     backdrop-filter: blur(2px);
   }
 
@@ -150,7 +157,7 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     z-index: 1;
   }
 
@@ -184,7 +191,8 @@
     border: 1px solid var(--border);
   }
 
-  .panel-preview svg {
+  .panel-preview svg,
+  .panel-preview img {
     width: 44px;
     height: 44px;
   }
@@ -200,6 +208,7 @@
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
+    text-transform: capitalize;
   }
 
   .panel-meta {
@@ -271,5 +280,41 @@
   :global(.style-chip:hover:not(.active)) {
     border-color: var(--border-hover);
     color: var(--text-primary);
+  }
+
+  /* ── Mobile ─────────────────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .main-content {
+      margin-left: 0;
+    }
+
+    .grid-wrap {
+      padding: 16px 12px;
+    }
+
+    .icon-grid {
+      grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      gap: 4px;
+      position: relative;
+      display: block;
+    }
+
+    :global(.icon-card) {
+      padding: 12px 4px 10px;
+      min-height: 76px;
+      height: 80px;
+    }
+
+    .panel-card {
+      width: calc(100vw - 32px);
+      max-width: 340px;
+    }
+  }
+
+  /* ── Tablet ──────────────────────────────────────────────────────────── */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .grid-wrap {
+      padding: 20px 16px;
+    }
   }
 </style>

@@ -3,16 +3,41 @@ import Layout from '../layouts/Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import TopBar from '../components/TopBar.astro';
 import IconGrid from '../components/IconGrid.astro';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 
 const families = readdirSync('./public/icons').sort();
 const styles   = readdirSync(`./public/icons/${families[0]}`).sort();
+
+const defaultFamily = families[0];
+const defaultStyle  = 'regular';
+let defaultSprite   = '';
+try {
+  defaultSprite = readFileSync(
+    `./public/sprites/${defaultFamily}-${defaultStyle}.svg`, 'utf-8'
+  );
+} catch {}
 ---
 
 <Layout>
+  <!-- Hidden SVG sprite sheet (inlined at build time) -->
+  <div id="sprite-sheet" style="display:none" set:html={defaultSprite} />
+
+  <!-- Mobile sidebar overlay -->
+  <div id="sidebar-overlay"></div>
+
   <Sidebar families={families} styles={styles} />
   <TopBar />
   <IconGrid />
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <span class="footer-copy">© {new Date().getFullYear()} Strange Icons</span>
+    <nav class="footer-links">
+      <a href="https://github.com/indigoscipio/strange-icons" target="_blank" rel="noopener">GitHub</a>
+      <a href="/license">License</a>
+      <a href="mailto:hello@strangeicons.com">Contact</a>
+    </nav>
+  </footer>
 </Layout>
 
 <script>

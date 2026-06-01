@@ -4,17 +4,17 @@ interface Props {
 }
 const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.props;
 ---
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Strange Icons — Open-source healthcare & biotech icon library with 40,000+ icons across multiple styles." />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body>
     <slot />
@@ -22,26 +22,28 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
 </html>
 
 <style is:global>
+  /* ── Design tokens ────────────────────────────────────────────────────── */
   :root {
-    --bg:          #f7f7f5;
-    --surface:     #ffffff;
-    --border:      #e8e8e4;
-    --border-hover:#c8c8c0;
-    --text-primary:#1a1a18;
-    --text-muted:  #8a8a80;
-    --text-subtle: #b8b8b0;
-    --accent:      #1a1a18;
-    --accent-hover:#3a3a30;
-    --copy-flash:  #d4f5e2;
-    --radius-sm:   6px;
-    --radius-md:   10px;
-    --radius-lg:   14px;
-    --sidebar-w:   220px;
-    --topbar-h:    56px;
-    --font-sans:   'DM Sans', sans-serif;
-    --font-mono:   'DM Mono', monospace;
+    --bg:            #f7f7f5;
+    --surface:       #ffffff;
+    --border:        #e8e8e4;
+    --border-hover:  #c8c8c0;
+    --text-primary:  #1a1a18;
+    --text-muted:    #8a8a80;
+    --text-subtle:   #b8b8b0;
+    --accent:        #1a1a18;
+    --accent-hover:  #3a3a30;
+    --copy-flash:    #d4f5e2;
+    --radius-sm:     6px;
+    --radius-md:     10px;
+    --radius-lg:     14px;
+    --sidebar-w:     220px;
+    --topbar-h:      56px;
+    --font-sans:     'DM Sans', sans-serif;
+    --font-mono:     'DM Mono', monospace;
   }
 
+  /* ── Reset ────────────────────────────────────────────────────────────── */
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -50,8 +52,8 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
 
   html {
     font-family: var(--font-sans);
-    background: var(--bg);
-    color: var(--text-primary);
+    background:  var(--bg);
+    color:       var(--text-primary);
     -webkit-font-smoothing: antialiased;
     font-size: 14px;
   }
@@ -71,14 +73,83 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
     font-family: var(--font-sans);
   }
 
-  ::-webkit-scrollbar {
-    width: 4px;
+  a {
+    color: inherit;
+    text-decoration: none;
   }
-  ::-webkit-scrollbar-track {
-    background: transparent;
+
+  ::-webkit-scrollbar        { width: 4px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 2px; }
+
+  /* ── Sidebar overlay (mobile) ─────────────────────────────────────────── */
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 9;
+    opacity: 0;
+    transition: opacity 0.2s;
   }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 2px;
+  #sidebar-overlay.visible {
+    opacity: 1;
+  }
+
+  /* ── Responsive breakpoints ───────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    :root {
+      --sidebar-w: 0px;
+    }
+    #sidebar-overlay {
+      display: block;
+    }
+  }
+
+  /* ── Footer ───────────────────────────────────────────────────────────── */
+  .site-footer {
+    margin-left: var(--sidebar-w);
+    border-top: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+  }
+
+  .site-footer .footer-copy {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-subtle);
+  }
+
+  .site-footer .footer-links {
+    display: flex;
+    gap: 16px;
+    margin-left: auto;
+  }
+
+  .site-footer .footer-links a {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    transition: color 0.12s;
+  }
+
+  .site-footer .footer-links a:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 767px) {
+    .site-footer {
+      margin-left: 0;
+      justify-content: center;
+      text-align: center;
+    }
+    .site-footer .footer-links {
+      margin-left: 0;
+      width: 100%;
+      justify-content: center;
+    }
   }
 </style>

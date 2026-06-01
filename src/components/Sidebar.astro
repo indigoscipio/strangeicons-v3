@@ -1,27 +1,26 @@
 ---
 interface Props {
   families: string[];
-  styles: string[];
+  styles:   string[];
 }
 const { families, styles } = Astro.props;
+const DEFAULT_STYLE = 'regular';
 ---
 
 <aside class="sidebar" id="sidebar">
-
   <div class="sidebar-brand">
     <span class="brand-mark">✦</span>
     <span class="brand-name">strangeicons</span>
   </div>
 
   <nav class="sidebar-nav">
-
     <div class="nav-section">
       <span class="nav-label">Library</span>
       <ul class="nav-list" id="family-list">
         {families.map((family, i) => (
           <li>
             <button
-              class={`nav-item ${i === 0 ? 'active' : ''}`}
+              class={`nav-item${i === 0 ? ' active' : ''}`}
               data-filter="family"
               data-value={family}
             >
@@ -38,7 +37,11 @@ const { families, styles } = Astro.props;
       <ul class="nav-list" id="style-list">
         {styles.map((style) => (
           <li>
-            <button class="nav-item" data-filter="style" data-value={style}>
+            <button
+              class={`nav-item${style === DEFAULT_STYLE ? ' active' : ''}`}
+              data-filter="style"
+              data-value={style}
+            >
               <span class="nav-item-dot"></span>
               {style}
             </button>
@@ -46,13 +49,11 @@ const { families, styles } = Astro.props;
         ))}
       </ul>
     </div>
-
   </nav>
 
   <div class="sidebar-footer">
     <span id="icon-count" class="count-badge">— icons</span>
   </div>
-
 </aside>
 
 <style>
@@ -66,9 +67,21 @@ const { families, styles } = Astro.props;
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    padding: 0;
     z-index: 10;
     overflow-y: auto;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Mobile: hide off-screen, slide in when .open */
+  @media (max-width: 767px) {
+    .sidebar {
+      width: 240px;
+      transform: translateX(-100%);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
   }
 
   .sidebar-brand {
@@ -77,6 +90,7 @@ const { families, styles } = Astro.props;
     gap: 8px;
     padding: 18px 20px 16px;
     border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
   .brand-mark {
@@ -166,6 +180,7 @@ const { families, styles } = Astro.props;
   .sidebar-footer {
     padding: 16px 20px;
     border-top: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
   .count-badge {

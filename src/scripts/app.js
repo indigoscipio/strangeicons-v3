@@ -1,26 +1,43 @@
 /**
- * strangeicons v3 — client app
- * All filtering, rendering, copy, and download logic.
- * Runs entirely in-browser against the pre-built icons.json index.
+ * strange icons v3 — client app
+ * Virtual scrolling, SVG sprites, fast filtering.
  */
 
-// ─── State ────────────────────────────────────────────────────────────────────
+// ── Config ────────────────────────────────────────────────────────────────────
+const CARD_HEIGHT     = 100;
+const CARD_MIN_WIDTH  = 88;
+const CARD_GAP        = 6;
+const BUFFER_ROWS     = 3;
+const SEARCH_DEBOUNCE = 120;
 
-let allIcons = [];       // raw icons.json data
-let activeFamily = null; // string
-let activeStyle  = 'regular'; // string | 'all'
-let searchQuery  = '';    // string
-let activePanel  = null;  // { icon, style } | null
+// ── State ─────────────────────────────────────────────────────────────────────
+let allIcons      = [];
+let filtered      = [];
+let activeFamily  = null;
+let activeStyle   = 'regular';
+let searchQuery   = '';
+let activePanel   = null;
+let colCount      = 1;
+let cardWidth     = CARD_MIN_WIDTH;
+let renderedStart = -1;
+let renderedEnd   = -1;
+let scrollRAF     = null;
+let resizeRAF     = null;
+let searchTimer   = null;
+let gridTopCache  = 0;
+let isFiltering   = false;
 
-// ─── DOM refs ─────────────────────────────────────────────────────────────────
+const spriteCache = new Map();
 
-const grid        = document.getElementById('icon-grid');
-const emptyState  = document.getElementById('empty-state');
-const iconCount   = document.getElementById('icon-count');
-const resultCount = document.getElementById('result-count');
-const searchInput = document.getElementById('search-input');
-const detailPanel = document.getElementById('detail-panel');
-const panelClose  = document.getElementById('panel-close');
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+const grid          = document.getElementById('icon-grid');
+const gridWrap      = document.getElementById('grid-wrap');
+const emptyState    = document.getElementById('empty-state');
+const iconCount     = document.getElementById('icon-count');
+const resultCount   = document.getElementById('result-count');
+const searchInput   = document.getElementById('search-input');
+const detailPanel   = document.getElementById('detail-panel');
+const panelClose    = document.getElementById('panel-close');
 const panelBackdrop = document.getElementById('panel-backdrop');
 const panelPreview  = document.getElementById('panel-preview');
 const panelName     = document.getElementById('panel-name');
@@ -29,111 +46,328 @@ const panelStyles   = document.getElementById('panel-styles');
 const btnCopySvg    = document.getElementById('btn-copy-svg');
 const btnCopyName   = document.getElementById('btn-copy-name');
 const btnDownload   = document.getElementById('btn-download');
+const menuToggle    = document.getElementById('menu-toggle');
+const sidebar       = document.getElementById('sidebar');
+let sidebarOverlay  = document.getElementById('sidebar-overlay');
 
-// ─── Boot ─────────────────────────────────────────────────────────────────────
-
-async function init() {
-  const res  = await fetch('/icons.json');
-  allIcons   = await res.json();
-
-  // Set initial family to first available
-  const families = [...new Set(allIcons.map(i => i.family))];
-  activeFamily   = families[0] ?? null;
-
-  // Mark correct sidebar item active on load
-  document.querySelectorAll('[data-filter="family"]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.value === activeFamily);
+if (!sidebarOverlay) {
+  sidebarOverlay = document.createElement('div');
+  sidebarOverlay.id = 'sidebar-overlay';
+  Object.assign(sidebarOverlay.style, {
+    position: 'fixed', inset: '0',
+    background: 'rgba(0,0,0,0.18)',
+    backdropFilter: 'blur(2px)',
+    opacity: '0', pointerEvents: 'none',
+    transition: 'opacity 0.22s cubic-bezier(0.4,0,0.2,1)',
+    zIndex: '8',
   });
-
-  updateIconCount();
-  render();
+  document.body.appendChild(sidebarOverlay);
 }
 
-// ─── Filtering ────────────────────────────────────────────────────────────────
-
-function getFiltered() {
-  return allIcons.filter(icon => {
-    const familyMatch = !activeFamily || icon.family === activeFamily;
-    const styleMatch  = activeStyle === 'all' || icon.styles.includes(activeStyle);
-    const q           = searchQuery.trim().toLowerCase();
-    const searchMatch = !q || icon.name.includes(q);
-    return familyMatch && styleMatch && searchMatch;
-  });
-}
-
-// ─── Render grid ──────────────────────────────────────────────────────────────
-
-function render() {
-  const filtered = getFiltered();
-
-  grid.innerHTML      = '';
-  emptyState.style.display = filtered.length === 0 ? 'flex' : 'none';
-  grid.style.display       = filtered.length === 0 ? 'none'  : 'grid';
-
-  resultCount.textContent = filtered.length > 0
-    ? `${filtered.length} icons`
-    : '';
-
-  // Determine which style to show per icon
-  const displayStyle = activeStyle !== 'all'
-    ? activeStyle
-    : null; // will pick first available
-
-  for (const icon of filtered) {
-    const style = displayStyle && icon.styles.includes(displayStyle)
-      ? displayStyle
-      : icon.styles[0];
-
-    const card = document.createElement('button');
-    card.className = 'icon-card';
-    card.dataset.name   = icon.name;
-    card.dataset.family = icon.family;
-    card.dataset.style  = style;
-    card.title = icon.name;
-
-    // Load SVG inline
-    const img = document.createElement('img');
-    img.src = `/icons/${icon.family}/${style}/${icon.name}.svg`;
-    img.alt    = icon.name;
-    img.width  = 28;
-    img.height = 28;
-    img.style.cssText = 'width:28px;height:28px;object-fit:contain;';
-
-    const label = document.createElement('span');
-    label.className   = 'icon-card-name';
-    label.textContent = icon.name.replace(/-/g, ' ');
-
-    card.appendChild(img);
-    card.appendChild(label);
-
-    card.addEventListener('click', () => openPanel(icon, style));
-    grid.appendChild(card);
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function setSidebarOpen(open) {
+  if (!sidebar) return;
+  sidebar.classList.toggle('open', open);
+  if (sidebarOverlay) {
+    sidebarOverlay.style.opacity = open ? '1' : '0';
+    sidebarOverlay.style.pointerEvents = open ? 'auto' : 'none';
   }
 }
 
-// ─── Detail panel ─────────────────────────────────────────────────────────────
+function getGridInnerWidth() {
+  if (!gridWrap) return window.innerWidth;
+  const styles = getComputedStyle(gridWrap);
+  return Math.max(0, gridWrap.clientWidth
+    - (parseFloat(styles.paddingLeft) || 0)
+    - (parseFloat(styles.paddingRight) || 0));
+}
 
+function recalcColumns() {
+  const innerWidth = getGridInnerWidth();
+  colCount = Math.max(1, Math.floor((innerWidth + CARD_GAP) / (CARD_MIN_WIDTH + CARD_GAP)));
+  cardWidth = Math.floor((innerWidth - (colCount - 1) * CARD_GAP) / colCount);
+  if (!Number.isFinite(cardWidth) || cardWidth < CARD_MIN_WIDTH) {
+    cardWidth = CARD_MIN_WIDTH;
+  }
+}
+
+function recalcGridTop() {
+  if (!gridWrap) { gridTopCache = 0; return; }
+  const styles = getComputedStyle(gridWrap);
+  gridTopCache = gridWrap.offsetTop + (parseFloat(styles.paddingTop) || 0);
+}
+
+function getRowCount()    { return Math.ceil(filtered.length / colCount); }
+function getTotalHeight() { return getRowCount() * CARD_HEIGHT; }
+
+function iconNameLabel(name) { return String(name).replace(/-/g, ' '); }
+
+function clearGrid() {
+  grid.replaceChildren();
+  grid.style.minHeight = '';
+  renderedStart = -1;
+  renderedEnd   = -1;
+}
+
+function flashButton(btn, text) {
+  const original = btn.textContent;
+  btn.textContent = text;
+  setTimeout(() => { btn.textContent = original; }, 1200);
+}
+
+// Get SVG text from in-memory sprite DOM — instant, no network
+function getSvgText(family, style, name) {
+  const symbol = document.getElementById(`${family}/${style}/${name}`);
+  if (!symbol) return null;
+  const vb = symbol.getAttribute('viewBox') || '0 0 24 24';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">${symbol.innerHTML}</svg>`;
+}
+
+// Load a sprite file into the sprite-sheet container
+async function loadSprite(family, style) {
+  const key = `${family}-${style}`;
+  if (spriteCache.has(key)) return;
+  const res = await fetch(`/sprites/${key}.svg`);
+  if (!res.ok) throw new Error(`Failed to load sprite: ${key}`);
+  const text = await res.text();
+  const temp = document.createElement('div');
+  temp.innerHTML = text;
+  const svgEl = temp.querySelector('svg');
+  if (svgEl) {
+    document.getElementById('sprite-sheet').append(...svgEl.childNodes);
+  }
+  spriteCache.set(key, true);
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+async function init() {
+  const res = await fetch('/icons.json');
+  if (!res.ok) throw new Error('icons.json could not be loaded');
+  allIcons = await res.json();
+
+  const families = [...new Set(allIcons.map(i => i.family))].sort();
+  activeFamily = families[0] ?? null;
+
+  // Mark default sprite as already loaded (inlined in HTML)
+  spriteCache.set(`${activeFamily}-${activeStyle}`, true);
+
+  document.querySelectorAll('[data-filter="family"]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.value === activeFamily);
+  });
+  document.querySelectorAll('[data-filter="style"]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.value === activeStyle);
+  });
+
+  updateIconCount();
+  recalcGridTop();
+  refilter(true);
+  setupListeners();
+  setupVirtualScroll();
+}
+
+function updateIconCount() {
+  const families = [...new Set(allIcons.map(i => i.family))];
+  iconCount.textContent = `${allIcons.length.toLocaleString()} icons · ${families.length} famil${families.length === 1 ? 'y' : 'ies'}`;
+}
+
+// ── Filtering ─────────────────────────────────────────────────────────────────
+async function refilter(scrollToTop = false) {
+  if (isFiltering) return;
+  isFiltering = true;
+
+  const q = searchQuery.trim().toLowerCase();
+  filtered = allIcons.filter(icon => {
+    if (activeFamily && icon.family !== activeFamily) return false;
+    if (activeStyle !== 'all' && !icon.styles.includes(activeStyle)) return false;
+    if (q && !icon.name.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  resultCount.textContent = filtered.length > 0 ? `${filtered.length} icons` : '';
+
+  const isEmpty = filtered.length === 0;
+  emptyState.style.display = isEmpty ? 'flex' : 'none';
+  grid.style.display = isEmpty ? 'none' : 'block';
+
+  clearGrid();
+
+  if (!isEmpty) {
+    const spriteStyle = activeStyle !== 'all' ? activeStyle : filtered[0].styles[0];
+    const spriteKey = `${activeFamily}-${spriteStyle}`;
+    if (!spriteCache.has(spriteKey)) {
+      grid.style.opacity = '0.3';
+      try {
+        await loadSprite(activeFamily, spriteStyle);
+      } catch (err) {
+        console.error(err);
+      }
+      grid.style.opacity = '';
+    }
+  }
+
+  if (scrollToTop) window.scrollTo(0, 0);
+  if (!isEmpty) renderVisible();
+
+  isFiltering = false;
+}
+
+// ── Virtual scroll ────────────────────────────────────────────────────────────
+function setupVirtualScroll() {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize, { passive: true });
+}
+
+function onScroll() {
+  if (scrollRAF) return;
+  scrollRAF = requestAnimationFrame(() => { scrollRAF = null; renderVisible(); });
+}
+
+function onResize() {
+  if (resizeRAF) cancelAnimationFrame(resizeRAF);
+  resizeRAF = requestAnimationFrame(() => {
+    recalcGridTop();
+    recalcColumns();
+    renderedStart = -1;
+    renderedEnd   = -1;
+    renderVisible();
+  });
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderVisible() {
+  if (filtered.length === 0) return;
+
+  recalcColumns();
+
+  const totalHeight = getTotalHeight();
+  grid.style.minHeight = `${totalHeight}px`;
+  grid.style.position  = 'relative';
+
+  const scrollTop  = window.scrollY;
+  const vpHeight   = window.innerHeight;
+  const relScroll  = Math.max(0, scrollTop - gridTopCache);
+
+  const firstRow    = Math.max(0, Math.floor(relScroll / CARD_HEIGHT) - BUFFER_ROWS);
+  const visibleRows = Math.ceil(vpHeight / CARD_HEIGHT) + BUFFER_ROWS * 2;
+  const lastRow     = Math.min(getRowCount() - 1, firstRow + visibleRows);
+
+  const startIdx = firstRow * colCount;
+  const endIdx   = Math.min(filtered.length - 1, (lastRow + 1) * colCount - 1);
+
+  if (startIdx === renderedStart && endIdx === renderedEnd) return;
+
+  const displayStyle = activeStyle !== 'all' ? activeStyle : null;
+
+  // Map of currently rendered cards
+  const existing = new Map();
+  for (const child of grid.children) {
+    existing.set(Number(child.dataset.index), child);
+  }
+
+  // Remove cards that scrolled out of range
+  const wanted = new Set();
+  for (let i = startIdx; i <= endIdx; i++) wanted.add(i);
+  for (const [idx, el] of existing) {
+    if (!wanted.has(idx)) el.remove();
+  }
+
+  const frag = document.createDocumentFragment();
+
+  for (let i = startIdx; i <= endIdx; i++) {
+    const icon = filtered[i];
+    if (!icon) continue;
+
+    const style = displayStyle && icon.styles.includes(displayStyle)
+      ? displayStyle : icon.styles[0];
+    const row = Math.floor(i / colCount);
+    const col = i % colCount;
+    const top    = `${row * CARD_HEIGHT}px`;
+    const left   = `${col * (cardWidth + CARD_GAP)}px`;
+    const width  = `${cardWidth}px`;
+    const height = `${CARD_HEIGHT - CARD_GAP}px`;
+    const symbolId = `${icon.family}/${style}/${icon.name}`;
+
+    if (existing.has(i)) {
+      const card = existing.get(i);
+      card.style.top    = top;
+      card.style.left   = left;
+      card.style.width  = width;
+      card.style.height = height;
+      card.dataset.style = style;
+      const use = card.querySelector('use');
+      if (use && use.getAttribute('href') !== `#${symbolId}`) {
+        use.setAttribute('href', `#${symbolId}`);
+      }
+    } else {
+      const card = document.createElement('button');
+      card.type      = 'button';
+      card.className = 'icon-card';
+      card.dataset.index  = String(i);
+      card.dataset.family = icon.family;
+      card.dataset.style  = style;
+      card.dataset.name   = icon.name;
+      card.title     = icon.name;
+      card.style.cssText =
+        `position:absolute;top:${top};left:${left};width:${width};height:${height};`;
+
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('width',  '28');
+      svg.setAttribute('height', '28');
+      svg.style.cssText = 'width:28px;height:28px;flex-shrink:0;';
+      const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      use.setAttribute('href', `#${symbolId}`);
+      svg.appendChild(use);
+
+      const lbl = document.createElement('span');
+      lbl.className   = 'icon-card-name';
+      lbl.textContent = iconNameLabel(icon.name);
+
+      card.appendChild(svg);
+      card.appendChild(lbl);
+      frag.appendChild(card);
+    }
+  }
+
+  grid.appendChild(frag);
+  renderedStart = startIdx;
+  renderedEnd   = endIdx;
+}
+
+// ── Detail panel ──────────────────────────────────────────────────────────────
 async function openPanel(icon, style) {
   activePanel = { icon, style };
 
-  panelName.textContent = icon.name.replace(/-/g, ' ');
+  panelName.textContent = iconNameLabel(icon.name);
   panelMeta.textContent = `${icon.family} · ${style}`;
 
-  // Preview
-  panelPreview.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = `/icons/${icon.family}/${style}/${icon.name}.svg`;
-  img.alt = icon.name;
-  img.style.cssText = 'width:44px;height:44px;object-fit:contain;';
-  panelPreview.appendChild(img);
+  // Load sprite if needed
+  const spriteKey = `${icon.family}-${style}`;
+  if (!spriteCache.has(spriteKey)) {
+    try {
+      await loadSprite(icon.family, style);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
-  // Style chips
-  panelStyles.innerHTML = '';
+  panelPreview.replaceChildren();
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width',  '44');
+  svg.setAttribute('height', '44');
+  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  use.setAttribute('href', `#${icon.family}/${style}/${icon.name}`);
+  svg.appendChild(use);
+  panelPreview.appendChild(svg);
+
+  panelStyles.replaceChildren();
   for (const s of icon.styles) {
     const chip = document.createElement('button');
-    chip.className    = `style-chip ${s === style ? 'active' : ''}`;
-    chip.textContent  = s;
-    chip.addEventListener('click', () => openPanel(icon, s));
+    chip.type        = 'button';
+    chip.className   = `style-chip${s === style ? ' active' : ''}`;
+    chip.textContent = s;
+    chip.addEventListener('click', () => { openPanel(icon, s); });
     panelStyles.appendChild(chip);
   }
 
@@ -147,105 +381,123 @@ function closePanel() {
   activePanel = null;
 }
 
-// ─── Copy / Download ──────────────────────────────────────────────────────────
-
-async function fetchSvgText(family, style, name) {
-  const res = await fetch(`/icons/${family}/${style}/${name}.svg`);
-  return res.text();
-}
-
-btnCopySvg.addEventListener('click', async () => {
+// ── Copy / download ───────────────────────────────────────────────────────────
+btnCopySvg?.addEventListener('click', async () => {
   if (!activePanel) return;
   const { icon, style } = activePanel;
-  const svg = await fetchSvgText(icon.family, style, icon.name);
-  await navigator.clipboard.writeText(svg);
-  flashButton(btnCopySvg, 'Copied!');
+  const svg = getSvgText(icon.family, style, icon.name);
+  if (!svg) { flashButton(btnCopySvg, 'Missing'); return; }
+  try {
+    await navigator.clipboard.writeText(svg);
+    flashButton(btnCopySvg, 'Copied!');
+  } catch {
+    flashButton(btnCopySvg, 'Failed');
+  }
 });
 
-btnCopyName.addEventListener('click', async () => {
+btnCopyName?.addEventListener('click', async () => {
   if (!activePanel) return;
-  await navigator.clipboard.writeText(activePanel.icon.name);
-  flashButton(btnCopyName, 'Copied!');
+  try {
+    await navigator.clipboard.writeText(activePanel.icon.name);
+    flashButton(btnCopyName, 'Copied!');
+  } catch {
+    flashButton(btnCopyName, 'Failed');
+  }
 });
 
-btnDownload.addEventListener('click', async () => {
+btnDownload?.addEventListener('click', async () => {
   if (!activePanel) return;
   const { icon, style } = activePanel;
-  const svg  = await fetchSvgText(icon.family, style, icon.name);
-  const blob = new Blob([svg], { type: 'image/svg+xml' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = `${icon.name}-${style}.svg`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const svg = getSvgText(icon.family, style, icon.name);
+  if (!svg) { flashButton(btnDownload, 'Missing'); return; }
+  try {
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url  = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href     = url;
+    a.download = `${icon.name}-${style}.svg`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+    flashButton(btnDownload, 'Done');
+  } catch {
+    flashButton(btnDownload, 'Failed');
+  }
 });
 
-function flashButton(btn, text) {
-  const original = btn.textContent;
-  btn.textContent = text;
-  setTimeout(() => { btn.textContent = original; }, 1400);
-}
-
-// ─── Sidebar interactions ─────────────────────────────────────────────────────
-
-document.querySelectorAll('[data-filter]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const { filter, value } = btn.dataset;
-
-    if (filter === 'family') {
-      activeFamily = value;
-      document.querySelectorAll('[data-filter="family"]').forEach(b =>
-        b.classList.toggle('active', b.dataset.value === value)
-      );
-    }
-
-    if (filter === 'style') {
-      activeStyle = value;
-      document.querySelectorAll('[data-filter="style"]').forEach(b =>
-        b.classList.toggle('active', b.dataset.value === value)
-      );
-    }
-
-    render();
+// ── Listeners ─────────────────────────────────────────────────────────────────
+function setupListeners() {
+  grid.addEventListener('click', (e) => {
+    const card = e.target.closest('.icon-card');
+    if (!card) return;
+    const idx  = Number(card.dataset.index);
+    const icon = filtered[idx];
+    if (!icon) return;
+    const style = card.dataset.style || activeStyle;
+    openPanel(icon, style);
   });
-});
 
-// ─── Search ───────────────────────────────────────────────────────────────────
+  document.querySelectorAll('[data-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const { filter, value } = btn.dataset;
+      if (filter === 'family') {
+        activeFamily = value;
+        document.querySelectorAll('[data-filter="family"]').forEach(b => {
+          b.classList.toggle('active', b.dataset.value === value);
+        });
+      }
+      if (filter === 'style') {
+        activeStyle = value;
+        document.querySelectorAll('[data-filter="style"]').forEach(b => {
+          b.classList.toggle('active', b.dataset.value === value);
+        });
+      }
+      refilter(true).catch(console.error);
+      if (window.innerWidth < 768) setSidebarOpen(false);
+    });
+  });
 
-searchInput.addEventListener('input', e => {
-  searchQuery = e.target.value;
-  render();
-});
-
-// Keyboard shortcut: press / to focus search
-document.addEventListener('keydown', e => {
-  if (e.key === '/' && document.activeElement !== searchInput) {
-    e.preventDefault();
-    searchInput.focus();
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimer);
+      const value = e.target.value;
+      searchTimer = setTimeout(() => {
+        searchQuery = value;
+        refilter(true).catch(console.error);
+      }, SEARCH_DEBOUNCE);
+    });
   }
-  if (e.key === 'Escape') {
-    if (activePanel) closePanel();
-    else searchInput.blur();
-  }
-});
 
-// ─── Panel close ──────────────────────────────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+    if (e.key === 'Escape') {
+      if (activePanel) { closePanel(); }
+      else { searchInput?.blur(); setSidebarOpen(false); }
+    }
+  });
 
-panelClose.addEventListener('click', closePanel);
-panelBackdrop.addEventListener('click', closePanel);
+  panelClose?.addEventListener('click', closePanel);
+  panelBackdrop?.addEventListener('click', closePanel);
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+  menuToggle?.addEventListener('click', () => {
+    setSidebarOpen(!sidebar?.classList.contains('open'));
+  });
+  sidebarOverlay?.addEventListener('click', () => setSidebarOpen(false));
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) setSidebarOpen(false);
+  });
 }
 
-function updateIconCount() {
-  const families = [...new Set(allIcons.map(i => i.family))];
-  iconCount.textContent = `${allIcons.length} icons · ${families.length} famil${families.length === 1 ? 'y' : 'ies'}`;
-}
-
-// ─── Start ────────────────────────────────────────────────────────────────────
-
-init();
+// ── Start ─────────────────────────────────────────────────────────────────────
+init().catch((err) => {
+  console.error(err);
+  emptyState.style.display = 'flex';
+  emptyState.innerHTML = `
+    <span class="empty-icon">⚠</span>
+    <p>Failed to load icons</p>
+    <span>Please check icons.json and refresh</span>`;
+  grid.style.display = 'none';
+});
