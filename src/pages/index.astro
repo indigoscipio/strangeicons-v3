@@ -3,14 +3,33 @@ import Layout from '../layouts/Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import TopBar from '../components/TopBar.astro';
 import IconGrid from '../components/IconGrid.astro';
-import { readdirSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 
-const families = readdirSync('./public/icons').sort();
-const styles   = readdirSync(`./public/icons/${families[0]}`).sort();
+let families = [];
+let styles   = [];
+let defaultFamily = 'asklepios';
+const defaultStyle = 'regular';
 
-const defaultFamily = families[0];
-const defaultStyle  = 'regular';
-let defaultSprite   = '';
+if (existsSync('./public/icons')) {
+  families = readdirSync('./public/icons').sort();
+  if (families.length > 0) {
+    styles = readdirSync(`./public/icons/${families[0]}`).sort();
+    defaultFamily = families[0];
+  }
+} else if (existsSync('./src/icons.json')) {
+  const index = JSON.parse(readFileSync('./src/icons.json', 'utf-8'));
+  const familySet = new Set();
+  const styleSet  = new Set();
+  for (const icon of index) {
+    familySet.add(icon.family);
+    icon.styles.forEach(s => styleSet.add(s));
+  }
+  families = [...familySet].sort();
+  styles   = [...styleSet].sort();
+  defaultFamily = families[0] || 'asklepios';
+}
+
+let defaultSprite = '';
 try {
   defaultSprite = readFileSync(
     `./public/sprites/${defaultFamily}-${defaultStyle}.svg`, 'utf-8'
