@@ -102,41 +102,44 @@ function getTotalHeight() { return getRowCount() * CARD_HEIGHT; }
 
 function iconNameLabel(name) { return String(name).replace(/-/g, ' '); }
 
-function clearGrid() {
-  grid.replaceChildren();
-  grid.style.minHeight = '';
-  renderedStart = -1;
-  renderedEnd   = -1;
-}
-
 function flashButton(btn, text) {
   const original = btn.textContent;
   btn.textContent = text;
   setTimeout(() => { btn.textContent = original; }, 1200);
 }
 
-// Get SVG text from in-memory sprite DOM — instant, no network
+// Get SVG text from DOM or cache
 function getSvgText(family, style, name) {
-  const symbol = document.getElementById(`${family}/${style}/${name}`);
-  if (!symbol) return null;
-  const vb = symbol.getAttribute('viewBox') || '0 0 24 24';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">${symbol.innerHTML}</svg>`;
+  const el = document.getElementById(`${family}/${style}/${name}`)
+    || spriteCache.get(`${family}-${style}`)?.find(s => s.id === `${family}/${style}/${name}`);
+  if (!el) return null;
+  const vb = el.getAttribute('viewBox') || '0 0 24 24';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">${el.innerHTML}</svg>`;
 }
 
-// Load a sprite file into the sprite-sheet container
+// Swap all sprite symbols — keeps DOM lean (only current family/style)
+function replaceSymbols(symbols) {
+  const sheet = document.getElementById('sprite-sheet');
+  sheet.querySelectorAll('symbol').forEach(s => s.remove());
+  sheet.append(...symbols);
+}
+
+// Load a sprite into the sprite-sheet container (caches parsed symbols)
 async function loadSprite(family, style) {
   const key = `${family}-${style}`;
-  if (spriteCache.has(key)) return;
-  const res = await fetch(`/sprites/${key}.svg`);
-  if (!res.ok) throw new Error(`Failed to load sprite: ${key}`);
-  const text = await res.text();
-  const temp = document.createElement('div');
-  temp.innerHTML = text;
-  const svgEl = temp.querySelector('svg');
-  if (svgEl) {
-    document.getElementById('sprite-sheet').append(...svgEl.childNodes);
+  let symbols;
+  if (spriteCache.has(key)) {
+    symbols = spriteCache.get(key);
+  } else {
+    const res = await fetch(`/sprites/${key}.svg`);
+    if (!res.ok) throw new Error(`Failed to load sprite: ${key}`);
+    const text = await res.text();
+    const temp = document.createElement('div');
+    temp.innerHTML = text;
+    symbols = Array.from(temp.querySelectorAll('symbol'));
+    spriteCache.set(key, symbols);
   }
-  spriteCache.set(key, true);
+  replaceSymbols(symbols);
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
@@ -148,8 +151,11 @@ async function init() {
   const families = [...new Set(allIcons.map(i => i.family))].sort();
   activeFamily = families[0] ?? null;
 
-  // Mark default sprite as already loaded (inlined in HTML)
-  spriteCache.set(`${activeFamily}-${activeStyle}`, true);
+  // Seed cache with inlined sprite symbols
+  const inlinedSymbols = Array.from(document.querySelectorAll('#sprite-sheet > symbol'));
+  if (inlinedSymbols.length > 0) {
+    spriteCache.set(`${activeFamily}-${activeStyle}`, inlinedSymbols);
+  }
 
   document.querySelectorAll('[data-filter="family"]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.value === activeFamily);
@@ -189,23 +195,22 @@ async function refilter(scrollToTop = false) {
   emptyState.style.display = isEmpty ? 'flex' : 'none';
   grid.style.display = isEmpty ? 'none' : 'block';
 
-  clearGrid();
-
   if (!isEmpty) {
     const spriteStyle = activeStyle !== 'all' ? activeStyle : filtered[0].styles[0];
     const spriteKey = `${activeFamily}-${spriteStyle}`;
-    if (!spriteCache.has(spriteKey)) {
-      grid.style.opacity = '0.3';
-      try {
-        await loadSprite(activeFamily, spriteStyle);
-      } catch (err) {
-        console.error(err);
-      }
-      grid.style.opacity = '';
+    const needsFetch = !spriteCache.has(spriteKey);
+    if (needsFetch) grid.style.opacity = '0.3';
+    try {
+      await loadSprite(activeFamily, spriteStyle);
+    } catch (err) {
+      console.error(err);
     }
+    grid.style.opacity = '';
   }
 
   if (scrollToTop) window.scrollTo(0, 0);
+  renderedStart = -1;
+  renderedEnd   = -1;
   if (!isEmpty) renderVisible();
 
   isFiltering = false;
@@ -341,25 +346,29 @@ async function openPanel(icon, style) {
   panelName.textContent = iconNameLabel(icon.name);
   panelMeta.textContent = `${icon.family} · ${style}`;
 
-  // Load sprite if needed
-  const spriteKey = `${icon.family}-${style}`;
-  if (!spriteCache.has(spriteKey)) {
-    try {
-      await loadSprite(icon.family, style);
-    } catch (err) {
-      console.error(err);
-    }
+  // Ensure sprite is cached without swapping
+  const key = `${icon.family}-${style}`;
+  if (!spriteCache.has(key)) {
+    const res = await fetch(`/sprites/${key}.svg`);
+    if (!res.ok) throw new Error(`Failed to load sprite: ${key}`);
+    const text = await res.text();
+    const temp = document.createElement('div');
+    temp.innerHTML = text;
+    spriteCache.set(key, Array.from(temp.querySelectorAll('symbol')));
   }
 
   panelPreview.replaceChildren();
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('width',  '44');
-  svg.setAttribute('height', '44');
-  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-  use.setAttribute('href', `#${icon.family}/${style}/${icon.name}`);
-  svg.appendChild(use);
-  panelPreview.appendChild(svg);
+  const cached = spriteCache.get(key);
+  const el = cached.find(s => s.id === `${icon.family}/${style}/${icon.name}`);
+  if (el) {
+    const vb = el.getAttribute('viewBox') || '0 0 24 24';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', vb);
+    svg.setAttribute('width', '44');
+    svg.setAttribute('height', '44');
+    svg.innerHTML = el.innerHTML;
+    panelPreview.appendChild(svg);
+  }
 
   panelStyles.replaceChildren();
   for (const s of icon.styles) {
@@ -367,7 +376,7 @@ async function openPanel(icon, style) {
     chip.type        = 'button';
     chip.className   = `style-chip${s === style ? ' active' : ''}`;
     chip.textContent = s;
-    chip.addEventListener('click', () => { openPanel(icon, s); });
+    chip.addEventListener('click', () => { openPanel(icon, s).catch(console.error); });
     panelStyles.appendChild(chip);
   }
 
@@ -433,7 +442,7 @@ function setupListeners() {
     const icon = filtered[idx];
     if (!icon) return;
     const style = card.dataset.style || activeStyle;
-    openPanel(icon, style);
+    openPanel(icon, style).catch(console.error);
   });
 
   document.querySelectorAll('[data-filter]').forEach((btn) => {
