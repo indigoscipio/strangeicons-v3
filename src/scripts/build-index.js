@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import { join, basename, extname } from "path";
 
 const ICONS_DIR     = "./public/icons";
@@ -7,6 +7,11 @@ const OUTPUT_SRC    = "./src/icons.json";
 const OUTPUT_PUBLIC = "./public/icons.json";
 
 mkdirSync(SPRITES_DIR, { recursive: true });
+
+if (!existsSync(ICONS_DIR)) {
+  console.log("⚠ public/icons/ not found — skipping sprite generation");
+  process.exit(0);
+}
 
 const result = {};
 

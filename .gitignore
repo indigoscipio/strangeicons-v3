@@ -23,6 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# icons
+# icons (raw SVGs — too many to commit)
 public/icons/
-src/icons.json
