@@ -1,6 +1,6 @@
 {
-  "name": "Strange Icons",
-  "short_name": "Strange Icons",
+  "name": "strangeicons",
+  "short_name": "strangeicons",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

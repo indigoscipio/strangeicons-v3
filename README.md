@@ -1,4 +1,4 @@
-# Strange Icons
+# strangeicons
 
 Open-source healthcare & biotech icon library with **40,000+ icons** across 6 families and 6 styles.
 
