@@ -178,6 +178,7 @@ async function init() {
 // ── Filtering ─────────────────────────────────────────────────────────────────
 async function refilter(scrollToTop = false) {
   if (isFiltering) return;
+  closePanel();
   isFiltering = true;
 
   const q = searchQuery.trim().toLowerCase();
@@ -298,10 +299,13 @@ function renderVisible() {
       card.style.width  = width;
       card.style.height = height;
       card.dataset.style = style;
+      card.title     = icon.name;
       const use = card.querySelector('use');
       if (use && use.getAttribute('href') !== `#${symbolId}`) {
         use.setAttribute('href', `#${symbolId}`);
       }
+      const nameLabel = card.querySelector('.icon-card-name');
+      if (nameLabel) nameLabel.textContent = iconNameLabel(icon.name);
     } else {
       const card = document.createElement('button');
       card.type      = 'button';
@@ -385,6 +389,7 @@ async function openPanel(icon, style) {
 function closePanel() {
   detailPanel.style.display = 'none';
   activePanel = null;
+  document.querySelectorAll('.icon-card.selected').forEach(c => c.classList.remove('selected'));
 }
 
 // ── Copy / download ───────────────────────────────────────────────────────────
@@ -429,6 +434,8 @@ function setupListeners() {
     const icon = filtered[idx];
     if (!icon) return;
     const style = card.dataset.style || activeStyle;
+    document.querySelectorAll('.icon-card.selected').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
     openPanel(icon, style).catch(console.error);
   });
 

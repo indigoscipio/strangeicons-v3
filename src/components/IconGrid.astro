@@ -65,11 +65,11 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 1rem 0.5rem 0.75rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: border-color 0.12s, box-shadow 0.12s, transform 0.1s;
+    transition: border-color 0.12s, box-shadow 0.12s, transform 0.1s, background 0.12s;
     min-height: 5.5rem;
     height: 5.875rem; /* fixed height for virtual scroll accuracy */
     content-visibility: auto;
@@ -77,9 +77,15 @@
   }
 
   :global(.icon-card:hover) {
-    border-color: var(--border-hover);
+    background: var(--surface);
+    border-color: var(--border);
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.06);
     transform: translateY(-1px);
+  }
+
+  :global(.icon-card.selected) {
+    background: var(--surface);
+    border-color: var(--accent);
   }
 
   :global(.icon-card.flash) {
@@ -99,8 +105,10 @@
     color: var(--text-muted);
     text-align: center;
     line-height: 1.3;
-    word-break: break-all;
     max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* Empty state */
