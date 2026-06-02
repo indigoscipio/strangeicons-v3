@@ -33,18 +33,15 @@ const spriteCache = new Map();
 const grid          = document.getElementById('icon-grid');
 const gridWrap      = document.getElementById('grid-wrap');
 const emptyState    = document.getElementById('empty-state');
-const iconCount     = document.getElementById('icon-count');
 const resultCount   = document.getElementById('result-count');
 const searchInput   = document.getElementById('search-input');
 const detailPanel   = document.getElementById('detail-panel');
 const panelClose    = document.getElementById('panel-close');
-const panelBackdrop = document.getElementById('panel-backdrop');
 const panelPreview  = document.getElementById('panel-preview');
 const panelName     = document.getElementById('panel-name');
 const panelMeta     = document.getElementById('panel-meta');
 const panelStyles   = document.getElementById('panel-styles');
 const btnCopySvg    = document.getElementById('btn-copy-svg');
-const btnCopyName   = document.getElementById('btn-copy-name');
 const btnDownload   = document.getElementById('btn-download');
 const menuToggle    = document.getElementById('menu-toggle');
 const sidebar       = document.getElementById('sidebar');
@@ -172,16 +169,10 @@ async function init() {
     btn.classList.toggle('active', btn.dataset.value === activeStyle);
   });
 
-  updateIconCount();
   recalcGridTop();
   refilter(true);
   setupListeners();
   setupVirtualScroll();
-}
-
-function updateIconCount() {
-  const families = [...new Set(allIcons.map(i => i.family))];
-  iconCount.textContent = `${allIcons.length.toLocaleString()} icons · ${families.length} famil${families.length === 1 ? 'y' : 'ies'}`;
 }
 
 // ── Filtering ─────────────────────────────────────────────────────────────────
@@ -389,12 +380,10 @@ async function openPanel(icon, style) {
   }
 
   detailPanel.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
 }
 
 function closePanel() {
   detailPanel.style.display = 'none';
-  document.body.style.overflow = '';
   activePanel = null;
 }
 
@@ -409,16 +398,6 @@ btnCopySvg?.addEventListener('click', async () => {
     flashButton(btnCopySvg, 'Copied!');
   } catch {
     flashButton(btnCopySvg, 'Failed');
-  }
-});
-
-btnCopyName?.addEventListener('click', async () => {
-  if (!activePanel) return;
-  try {
-    await navigator.clipboard.writeText(activePanel.icon.name);
-    flashButton(btnCopyName, 'Copied!');
-  } catch {
-    flashButton(btnCopyName, 'Failed');
   }
 });
 
@@ -496,7 +475,6 @@ function setupListeners() {
   });
 
   panelClose?.addEventListener('click', closePanel);
-  panelBackdrop?.addEventListener('click', closePanel);
 
   menuToggle?.addEventListener('click', () => {
     setSidebarOpen(!sidebar?.classList.contains('open'));

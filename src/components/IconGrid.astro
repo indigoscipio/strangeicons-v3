@@ -14,26 +14,26 @@
   </div>
 </main>
 
-<!-- Icon detail panel -->
+<!-- Icon detail panel (bottom bar) -->
 <div class="detail-panel" id="detail-panel" style="display:none;">
-  <div class="panel-backdrop" id="panel-backdrop"></div>
-  <div class="panel-card">
+  <div class="panel-bar">
+    <div class="panel-left">
+      <div class="panel-preview" id="panel-preview"></div>
+      <div class="panel-info">
+        <p class="panel-name" id="panel-name"></p>
+        <p class="panel-meta" id="panel-meta"></p>
+        <div class="panel-styles" id="panel-styles"></div>
+      </div>
+    </div>
+    <div class="panel-actions">
+      <button class="panel-btn primary" id="btn-copy-svg">Copy SVG</button>
+      <button class="panel-btn" id="btn-download">Download</button>
+    </div>
     <button class="panel-close" id="panel-close">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
         <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </button>
-    <div class="panel-preview" id="panel-preview"></div>
-    <div class="panel-info">
-      <p class="panel-name" id="panel-name"></p>
-      <p class="panel-meta" id="panel-meta"></p>
-    </div>
-    <div class="panel-actions">
-      <button class="panel-btn primary" id="btn-copy-svg">Copy SVG</button>
-      <button class="panel-btn" id="btn-copy-name">Copy name</button>
-      <button class="panel-btn" id="btn-download">Download</button>
-    </div>
-    <div class="panel-styles" id="panel-styles"></div>
   </div>
 </div>
 
@@ -129,42 +129,29 @@
     font-size: 13px;
   }
 
-  /* Detail panel */
+  /* ── Detail panel (bottom bar) ──────────────────────────────────────── */
   .detail-panel {
     position: fixed;
-    inset: 0;
-    z-index: 100;
+    bottom: 0;
+    left: var(--sidebar-w);
+    right: 0;
+    z-index: 50;
     display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  .panel-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.18);
-    backdrop-filter: blur(2px);
-  }
-
-  .panel-card {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    width: 300px;
+  .panel-bar {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    z-index: 1;
+    margin: 24px 48px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06);
+    width: 100%;
   }
 
   .panel-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
     width: 28px;
     height: 28px;
     display: flex;
@@ -172,6 +159,7 @@
     justify-content: center;
     border-radius: var(--radius-sm);
     color: var(--text-muted);
+    flex-shrink: 0;
     transition: background 0.12s;
   }
 
@@ -180,60 +168,75 @@
     color: var(--text-primary);
   }
 
+  .panel-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
   .panel-preview {
-    width: 80px;
-    height: 80px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--bg);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
-  .panel-preview svg,
-  .panel-preview img {
-    width: 44px;
-    height: 44px;
+  .panel-preview svg {
+    width: 28px;
+    height: 28px;
   }
 
   .panel-info {
-    text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
   }
 
   .panel-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text-primary);
     text-transform: capitalize;
   }
 
   .panel-meta {
-    font-size: 11px;
+    font-size: 10px;
     font-family: var(--font-mono);
     color: var(--text-subtle);
     text-transform: capitalize;
   }
 
-  .panel-actions {
+  .panel-styles {
     display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 2px;
+  }
+
+  .panel-actions {
+    justify-content: flex-end;
+    display: flex;
+    flex-wrap: wrap;
     gap: 6px;
-    width: 100%;
+    margin-left: auto;
   }
 
   .panel-btn {
-    flex: 1;
-    padding: 8px 0;
+    padding: 6px 12px;
     border-radius: var(--radius-sm);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     background: var(--bg);
     color: var(--text-primary);
     border: 1px solid var(--border);
     transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
   }
 
   .panel-btn:hover {
@@ -250,14 +253,6 @@
     background: var(--accent-hover);
   }
 
-  .panel-styles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: center;
-    width: 100%;
-  }
-
   :global(.style-chip) {
     font-size: 10px;
     font-family: var(--font-mono);
@@ -269,6 +264,7 @@
     cursor: pointer;
     text-transform: capitalize;
     transition: background 0.1s, border-color 0.1s;
+    white-space: nowrap;
   }
 
   :global(.style-chip.active) {
@@ -305,9 +301,42 @@
       height: 80px;
     }
 
-    .panel-card {
-      width: calc(100vw - 32px);
-      max-width: 340px;
+    .detail-panel {
+      left: 0;
+    }
+
+    .panel-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      padding: 40px 12px 12px;
+      position: relative;
+    }
+
+    .panel-left {
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .panel-info {
+      align-items: center;
+      text-align: center;
+    }
+
+    .panel-styles {
+      justify-content: center;
+    }
+
+    .panel-actions {
+      justify-content: center;
+      margin-left: 0;
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
     }
   }
 
