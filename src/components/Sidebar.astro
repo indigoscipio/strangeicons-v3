@@ -9,8 +9,7 @@ const DEFAULT_STYLE = 'regular';
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
-    <span class="brand-mark">✦</span>
-    <span class="brand-name">strangeicons</span>
+    <img src="/logo.svg" alt="Strange Icons" class="brand-logo" />
     <span class="version-badge">v3.1</span>
   </div>
 
@@ -97,18 +96,11 @@ const DEFAULT_STYLE = 'regular';
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
   }
-
-  .brand-mark {
-    font-size: 0.875rem;
-    color: var(--text-primary);
-    line-height: 1;
-  }
-
-  .brand-name {
-    font-size: 0.813rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+  
+  .brand-logo {
+    height: 1.25rem;
+    width: auto;
+    flex-shrink: 0;
   }
 
   .version-badge {

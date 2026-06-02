@@ -11,7 +11,32 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Strange Icons — Open-source healthcare & biotech icon library with 40,000+ icons across multiple styles." />
     <title>{title}</title>
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:title" content="Strange Icons — Healthcare & Biotech Icon Library" />
+    <meta property="og:description" content="Strange Icons — Open-source healthcare & biotech icon library with 40,000+ icons across multiple styles." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://strangeicons.com" />
+    <meta property="og:image" content="/opengraph.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://strangeicons.com" />
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Strange Icons",
+  "description": "Open-source healthcare & biotech icon library with 40,000+ icons across multiple styles.",
+  "url": "https://strangeicons.com"
+}
+    </script>
   </head>
   <body>
     <slot />
@@ -62,7 +87,7 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
 
   body {
     min-height: 100vh;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 
   button {

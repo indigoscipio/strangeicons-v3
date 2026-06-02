@@ -2,4 +2,10 @@
 import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
-export default defineConfig({output: 'static',});
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://strangeicons.com',
+  output: 'static',
+  integrations: [sitemap()],
+});
