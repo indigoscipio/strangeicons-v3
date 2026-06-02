@@ -103,9 +103,17 @@ function getTotalHeight() { return getRowCount() * CARD_HEIGHT; }
 function iconNameLabel(name) { return String(name).replace(/-/g, ' '); }
 
 function flashButton(btn, text) {
-  const original = btn.textContent;
+  if (btn._flashTimer) {
+    clearTimeout(btn._flashTimer);
+  } else {
+    btn.dataset._orig = btn.textContent;
+  }
   btn.textContent = text;
-  setTimeout(() => { btn.textContent = original; }, 1200);
+  btn._flashTimer = setTimeout(() => {
+    btn.textContent = btn.dataset._orig;
+    btn._flashTimer = null;
+    delete btn.dataset._orig;
+  }, 1200);
 }
 
 // Get SVG text from DOM or cache
