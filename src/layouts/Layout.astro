@@ -12,9 +12,6 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
     <meta name="description" content="Strange Icons — Open-source healthcare & biotech icon library with 40,000+ icons across multiple styles." />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body>
     <slot />
@@ -22,6 +19,12 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
 </html>
 
 <style is:global>
+  /* ── Fonts ──────────────────────────────────────────────────────────────── */
+  @font-face { font-family: 'Roobert'; src: url('/fonts/Roobert-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Roobert'; src: url('/fonts/Roobert-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Roobert'; src: url('/fonts/Roobert-SemiBold.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Roobert'; src: url('/fonts/Roobert-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+
   /* ── Design tokens ────────────────────────────────────────────────────── */
   :root {
     --bg:            #f7f7f5;
@@ -34,13 +37,12 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
     --accent:        #1a1a18;
     --accent-hover:  #3a3a30;
     --copy-flash:    #d4f5e2;
-    --radius-sm:     6px;
-    --radius-md:     10px;
-    --radius-lg:     14px;
-    --sidebar-w:     220px;
-    --topbar-h:      56px;
-    --font-sans:     'DM Sans', sans-serif;
-    --font-mono:     'DM Mono', monospace;
+    --radius-sm:     0.375rem;
+    --radius-md:     0.625rem;
+    --radius-lg:     0.875rem;
+    --sidebar-w:     13.75rem;
+    --topbar-h:      3.5rem;
+    --font-sans:     'Roobert', sans-serif;
   }
 
   /* ── Reset ────────────────────────────────────────────────────────────── */
@@ -55,11 +57,12 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
     background:  var(--bg);
     color:       var(--text-primary);
     -webkit-font-smoothing: antialiased;
-    font-size: 14px;
+    font-size: 100%;
   }
 
   body {
     min-height: 100vh;
+    font-size: 0.875rem;
   }
 
   button {
@@ -110,28 +113,26 @@ const { title = "Strange Icons — Healthcare & Biotech Icon Library" } = Astro.
   .site-footer {
     margin-left: var(--sidebar-w);
     border-top: 1px solid var(--border);
-    padding: 20px 24px;
+    padding: 1.25rem 1.5rem;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 4px 20px;
+    gap: 4px 1.25rem;
   }
 
   .site-footer .footer-copy {
-    font-size: 11px;
-    font-family: var(--font-mono);
+    font-size: 0.688rem;
     color: var(--text-subtle);
   }
 
   .site-footer .footer-links {
     display: flex;
-    gap: 16px;
+    gap: 1rem;
     margin-left: auto;
   }
 
   .site-footer .footer-links a {
-    font-size: 11px;
-    font-family: var(--font-mono);
+    font-size: 0.688rem;
     color: var(--text-muted);
     transition: color 0.12s;
   }
