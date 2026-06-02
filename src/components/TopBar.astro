@@ -32,6 +32,7 @@
 <style>
   .topbar {
     position: fixed;
+    border-bottom-right-radius: var(--radius-lg);
     top: 0;
     left: var(--sidebar-w);
     right: 0;
@@ -69,10 +70,10 @@
     gap: 0.625rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
     padding: 0 0.75rem;
     height: 2.25rem;
-    width: 17.5rem;
+    width: 18rem;
     transition: border-color 0.15s;
     flex-shrink: 0;
   }
@@ -91,7 +92,6 @@
     border: none;
     background: none;
     outline: none;
-    font-size: 0.813rem;
     color: var(--text-primary);
     min-width: 0;
   }
@@ -101,11 +101,10 @@
   }
 
   .search-shortcut {
-    font-size: 0.688rem;
+    font-size: 0.75rem;
     color: var(--text-subtle);
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 3px;
     padding: 1px 5px;
     line-height: 1.4;
     flex-shrink: 0;
@@ -123,7 +122,7 @@
   }
 
   .result-count {
-    font-size: 0.75rem;
+    font-size: 0.825rem;
     color: var(--border);
     white-space: nowrap;
   }

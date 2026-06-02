@@ -1,46 +1,19 @@
-# Astro Starter Kit: Basics
+# Strange Icons
 
-```sh
-npm create astro@latest -- --template basics
-```
+Open-source healthcare & biotech icon library with **40,000+ icons** across 6 families and 6 styles.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+[Browse icons](https://strangeicons.com) · [Figma plugin](https://www.figma.com/community/plugin/1444854975916128113/strangeicons-healthcare-biotech-ui-icons) · [Download v3.1](https://github.com/indigoscipio/strangeicons-v3/releases/tag/v3.1)
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+## Families
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+Asklepios · Freud · Nightingale · Osler · Sandow · Turing
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Styles
 
-## 🧞 Commands
+Bold · Duoline · Duotone · Fill · Light · Regular
 
-All commands are run from the root of the project, from a terminal:
+## License
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT — free for personal and commercial use.
