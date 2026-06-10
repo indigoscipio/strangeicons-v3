@@ -185,7 +185,7 @@ async function refilter(scrollToTop = false) {
   filtered = allIcons.filter(icon => {
     if (activeFamily && icon.family !== activeFamily) return false;
     if (activeStyle !== 'all' && !icon.styles.includes(activeStyle)) return false;
-    if (q && !icon.name.toLowerCase().includes(q)) return false;
+    if (q && !q.split(/\s+/).every(t => icon.name.toLowerCase().includes(t))) return false;
     return true;
   });
 
