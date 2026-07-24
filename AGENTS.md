@@ -26,6 +26,7 @@
 - After changing raw icons or index-generation logic, run `npm run build:index` and include all resulting generated-file changes.
 - When `public/icons/` is absent, normal index generation validates the tracked metadata and sprites before allowing a website build. Release generation fails instead of using the fallback.
 - `src/scripts/copy-icons.js` is not an npm script. It deletes `public/icons/` before copying a root `icons/` directory; run it only when intentionally importing a complete raw icon corpus.
+- Accepted raw filename migrations and removals are recorded in `src/data/icon-renames.json`. `npm run icons:rename` is a dry run; `npm run icons:rename:apply` modifies the ignored raw corpus and must be followed by release generation and audit.
 - Sprite symbol IDs must remain `${family}/${style}/${name}` in both `build-index.js` and `app.js`.
 
 ## Runtime Coupling

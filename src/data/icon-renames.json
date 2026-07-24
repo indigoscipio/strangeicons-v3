@@ -1,0 +1,23 @@
+{
+  "renames": {
+    "egg cracked": "egg-cracked",
+    "emotion depressed": "emotion-depressed",
+    "Icon": "hands-droplet",
+    "arow-shuffle": "arrow-shuffle",
+    "currecy-try": "currency-try",
+    "shapes-triangle-square-circlce": "shapes-triangle-square-circle",
+    "tounge": "tongue",
+    "bowl-of-hygeia-1": "bowl-of-hygieia-1",
+    "bowl-of-hygeia-2": "bowl-of-hygieia-2",
+    "bacteria-11": "bacteria-2"
+  },
+  "replacements": [
+    {
+      "family": "freud",
+      "remove": "face-mask-1",
+      "from": "face-mask-1-1",
+      "to": "face-mask-1",
+      "reason": "Replace a duplicate rod-of-asclepius concept with the actual face-mask artwork"
+    }
+  ]
+}

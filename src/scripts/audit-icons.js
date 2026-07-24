@@ -20,17 +20,6 @@ const FAMILY_COLORS = {
   turing: "#7c3aed",
 };
 
-const NAME_REVIEW_CANDIDATES = new Map([
-  ["arow-shuffle", "possible spelling: arrow-shuffle"],
-  ["currecy-try", "possible spelling issue"],
-  ["shapes-triangle-square-circlce", "possible spelling: circle"],
-  ["tounge", "possible spelling: tongue"],
-  ["bowl-of-hygeia-1", "review domain spelling"],
-  ["bowl-of-hygeia-2", "review domain spelling"],
-  ["bacteria-11", "suspicious numeric suffix"],
-  ["face-mask-1-1", "repeated numeric suffix"],
-]);
-
 const args = new Set(process.argv.slice(2));
 const allowedArgs = new Set(["--all", "--require-icons"]);
 for (const arg of args) {
@@ -376,15 +365,6 @@ function auditRaw() {
   validateCatalog(catalog, "raw corpus", false);
   if (rawSvgCount !== library.iconVariantCount) {
     addFinding("ERROR", "RAW_SVG_COUNT", `${rawSvgCount}; expected ${library.iconVariantCount}`);
-  }
-
-  const conceptNames = new Map();
-  for (const key of catalog.keys()) {
-    const name = key.slice(key.indexOf("::") + 2);
-    conceptNames.set(name, (conceptNames.get(name) || 0) + 1);
-  }
-  for (const [name, note] of NAME_REVIEW_CANDIDATES) {
-    if (conceptNames.has(name)) addFinding("WARN", "NAME_REVIEW_CANDIDATE", `${name}: ${note}`, conceptNames.get(name));
   }
 
   for (const [key, suffixes] of numericGroups) {

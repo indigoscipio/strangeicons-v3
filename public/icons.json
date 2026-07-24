@@ -336,20 +336,6 @@
     "tags": []
   },
   {
-    "name": "arow-shuffle",
-    "family": "asklepios",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "arrow-backward",
     "family": "asklepios",
     "styles": [
@@ -1008,6 +994,20 @@
     "tags": []
   },
   {
+    "name": "arrow-shuffle",
+    "family": "asklepios",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "arrow-sign-in-1",
     "family": "asklepios",
     "styles": [
@@ -1526,7 +1526,7 @@
     "tags": []
   },
   {
-    "name": "bacteria-11",
+    "name": "bacteria-2",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -2268,7 +2268,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-1",
+    "name": "bowl-of-hygieia-1",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -2282,7 +2282,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-2",
+    "name": "bowl-of-hygieia-2",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -4536,20 +4536,6 @@
     "tags": []
   },
   {
-    "name": "currecy-try",
-    "family": "asklepios",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "currency-btc",
     "family": "asklepios",
     "styles": [
@@ -4691,6 +4677,20 @@
   },
   {
     "name": "currency-rub",
+    "family": "asklepios",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "currency-try",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -5166,20 +5166,6 @@
     "tags": []
   },
   {
-    "name": "egg cracked",
-    "family": "asklepios",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "egg-1",
     "family": "asklepios",
     "styles": [
@@ -5209,6 +5195,20 @@
   },
   {
     "name": "egg-3",
+    "family": "asklepios",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "egg-cracked",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -5264,7 +5264,7 @@
     "tags": []
   },
   {
-    "name": "emotion depressed",
+    "name": "emotion-depressed",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -6902,6 +6902,20 @@
     "tags": []
   },
   {
+    "name": "hands-droplet",
+    "family": "asklepios",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "hands-health-cross",
     "family": "asklepios",
     "styles": [
@@ -7393,20 +7407,6 @@
   },
   {
     "name": "ice-skating",
-    "family": "asklepios",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "Icon",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -12222,7 +12222,7 @@
     "tags": []
   },
   {
-    "name": "shapes-triangle-square-circlce",
+    "name": "shapes-triangle-square-circle",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -14042,6 +14042,20 @@
     "tags": []
   },
   {
+    "name": "tongue",
+    "family": "asklepios",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "tooth-brace",
     "family": "asklepios",
     "styles": [
@@ -14155,20 +14169,6 @@
   },
   {
     "name": "torso-skeleton",
-    "family": "asklepios",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "tounge",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -15470,20 +15470,6 @@
     "tags": []
   },
   {
-    "name": "arow-shuffle",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "arrow-backward-1",
     "family": "freud",
     "styles": [
@@ -16170,6 +16156,20 @@
     "tags": []
   },
   {
+    "name": "arrow-shuffle",
+    "family": "freud",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "arrow-sign-in-1",
     "family": "freud",
     "styles": [
@@ -16688,7 +16688,7 @@
     "tags": []
   },
   {
-    "name": "bacteria-11",
+    "name": "bacteria-2",
     "family": "freud",
     "styles": [
       "bold",
@@ -17430,7 +17430,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-1",
+    "name": "bowl-of-hygieia-1",
     "family": "freud",
     "styles": [
       "bold",
@@ -17444,7 +17444,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-2",
+    "name": "bowl-of-hygieia-2",
     "family": "freud",
     "styles": [
       "bold",
@@ -19712,20 +19712,6 @@
     "tags": []
   },
   {
-    "name": "currecy-try",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "currency-btc",
     "family": "freud",
     "styles": [
@@ -19867,6 +19853,20 @@
   },
   {
     "name": "currency-rub",
+    "family": "freud",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "currency-try",
     "family": "freud",
     "styles": [
       "bold",
@@ -20342,20 +20342,6 @@
     "tags": []
   },
   {
-    "name": "egg cracked",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "egg-1",
     "family": "freud",
     "styles": [
@@ -20385,6 +20371,20 @@
   },
   {
     "name": "egg-3",
+    "family": "freud",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "egg-cracked",
     "family": "freud",
     "styles": [
       "bold",
@@ -20440,7 +20440,7 @@
     "tags": []
   },
   {
-    "name": "emotion depressed",
+    "name": "emotion-depressed",
     "family": "freud",
     "styles": [
       "bold",
@@ -20805,20 +20805,6 @@
   },
   {
     "name": "face-id",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "face-mask-1-1",
     "family": "freud",
     "styles": [
       "bold",
@@ -22162,6 +22148,20 @@
     "tags": []
   },
   {
+    "name": "hands-droplet",
+    "family": "freud",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "hands-health-cross",
     "family": "freud",
     "styles": [
@@ -22695,20 +22695,6 @@
   },
   {
     "name": "ice-skating",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "Icon",
     "family": "freud",
     "styles": [
       "bold",
@@ -27524,7 +27510,7 @@
     "tags": []
   },
   {
-    "name": "shapes-triangle-square-circlce",
+    "name": "shapes-triangle-square-circle",
     "family": "freud",
     "styles": [
       "bold",
@@ -29344,6 +29330,20 @@
     "tags": []
   },
   {
+    "name": "tongue",
+    "family": "freud",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "tooth-brace",
     "family": "freud",
     "styles": [
@@ -29457,20 +29457,6 @@
   },
   {
     "name": "torso-skeleton",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "tounge",
     "family": "freud",
     "styles": [
       "bold",
@@ -30772,20 +30758,6 @@
     "tags": []
   },
   {
-    "name": "arow-shuffle",
-    "family": "nightingale",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "arrow-backward",
     "family": "nightingale",
     "styles": [
@@ -31444,6 +31416,20 @@
     "tags": []
   },
   {
+    "name": "arrow-shuffle",
+    "family": "nightingale",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "arrow-sign-in-1",
     "family": "nightingale",
     "styles": [
@@ -31962,7 +31948,7 @@
     "tags": []
   },
   {
-    "name": "bacteria-11",
+    "name": "bacteria-2",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -32704,7 +32690,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-1",
+    "name": "bowl-of-hygieia-1",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -32718,7 +32704,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-2",
+    "name": "bowl-of-hygieia-2",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -34972,20 +34958,6 @@
     "tags": []
   },
   {
-    "name": "currecy-try",
-    "family": "nightingale",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "currency-btc",
     "family": "nightingale",
     "styles": [
@@ -35127,6 +35099,20 @@
   },
   {
     "name": "currency-rub",
+    "family": "nightingale",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "currency-try",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -35602,20 +35588,6 @@
     "tags": []
   },
   {
-    "name": "egg cracked",
-    "family": "nightingale",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "egg-1",
     "family": "nightingale",
     "styles": [
@@ -35645,6 +35617,20 @@
   },
   {
     "name": "egg-3",
+    "family": "nightingale",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "egg-cracked",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -35700,7 +35686,7 @@
     "tags": []
   },
   {
-    "name": "emotion depressed",
+    "name": "emotion-depressed",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -37338,6 +37324,20 @@
     "tags": []
   },
   {
+    "name": "hands-droplet",
+    "family": "nightingale",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "hands-health-cross",
     "family": "nightingale",
     "styles": [
@@ -37829,20 +37829,6 @@
   },
   {
     "name": "ice-skating",
-    "family": "nightingale",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "Icon",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -42658,7 +42644,7 @@
     "tags": []
   },
   {
-    "name": "shapes-triangle-square-circlce",
+    "name": "shapes-triangle-square-circle",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -44408,6 +44394,20 @@
     "tags": []
   },
   {
+    "name": "tongue",
+    "family": "nightingale",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "tooth-brace",
     "family": "nightingale",
     "styles": [
@@ -44521,20 +44521,6 @@
   },
   {
     "name": "torso-skeleton",
-    "family": "nightingale",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "tounge",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -45836,20 +45822,6 @@
     "tags": []
   },
   {
-    "name": "arow-shuffle",
-    "family": "osler",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "arrow-backward",
     "family": "osler",
     "styles": [
@@ -46508,6 +46480,20 @@
     "tags": []
   },
   {
+    "name": "arrow-shuffle",
+    "family": "osler",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "arrow-sign-in-1",
     "family": "osler",
     "styles": [
@@ -47026,7 +47012,7 @@
     "tags": []
   },
   {
-    "name": "bacteria-11",
+    "name": "bacteria-2",
     "family": "osler",
     "styles": [
       "bold",
@@ -47768,7 +47754,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-1",
+    "name": "bowl-of-hygieia-1",
     "family": "osler",
     "styles": [
       "bold",
@@ -47782,7 +47768,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-2",
+    "name": "bowl-of-hygieia-2",
     "family": "osler",
     "styles": [
       "bold",
@@ -50036,20 +50022,6 @@
     "tags": []
   },
   {
-    "name": "currecy-try",
-    "family": "osler",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "currency-btc",
     "family": "osler",
     "styles": [
@@ -50191,6 +50163,20 @@
   },
   {
     "name": "currency-rub",
+    "family": "osler",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "currency-try",
     "family": "osler",
     "styles": [
       "bold",
@@ -50666,20 +50652,6 @@
     "tags": []
   },
   {
-    "name": "egg cracked",
-    "family": "osler",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "egg-1",
     "family": "osler",
     "styles": [
@@ -50709,6 +50681,20 @@
   },
   {
     "name": "egg-3",
+    "family": "osler",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "egg-cracked",
     "family": "osler",
     "styles": [
       "bold",
@@ -50764,7 +50750,7 @@
     "tags": []
   },
   {
-    "name": "emotion depressed",
+    "name": "emotion-depressed",
     "family": "osler",
     "styles": [
       "bold",
@@ -52472,6 +52458,20 @@
     "tags": []
   },
   {
+    "name": "hands-droplet",
+    "family": "osler",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "hands-health-cross",
     "family": "osler",
     "styles": [
@@ -52949,20 +52949,6 @@
   },
   {
     "name": "ice-skating",
-    "family": "osler",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "Icon",
     "family": "osler",
     "styles": [
       "bold",
@@ -57750,7 +57736,7 @@
     "tags": []
   },
   {
-    "name": "shapes-triangle-square-circlce",
+    "name": "shapes-triangle-square-circle",
     "family": "osler",
     "styles": [
       "bold",
@@ -59500,6 +59486,20 @@
     "tags": []
   },
   {
+    "name": "tongue",
+    "family": "osler",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "tooth-brace",
     "family": "osler",
     "styles": [
@@ -59613,20 +59613,6 @@
   },
   {
     "name": "torso-skeleton",
-    "family": "osler",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "tounge",
     "family": "osler",
     "styles": [
       "bold",
@@ -60928,20 +60914,6 @@
     "tags": []
   },
   {
-    "name": "arow-shuffle",
-    "family": "sandow",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "arrow-backward-1",
     "family": "sandow",
     "styles": [
@@ -61628,6 +61600,20 @@
     "tags": []
   },
   {
+    "name": "arrow-shuffle",
+    "family": "sandow",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "arrow-sign-in-1",
     "family": "sandow",
     "styles": [
@@ -62146,7 +62132,7 @@
     "tags": []
   },
   {
-    "name": "bacteria-11",
+    "name": "bacteria-2",
     "family": "sandow",
     "styles": [
       "bold",
@@ -62888,7 +62874,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-1",
+    "name": "bowl-of-hygieia-1",
     "family": "sandow",
     "styles": [
       "bold",
@@ -62902,7 +62888,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-2",
+    "name": "bowl-of-hygieia-2",
     "family": "sandow",
     "styles": [
       "bold",
@@ -65156,20 +65142,6 @@
     "tags": []
   },
   {
-    "name": "currecy-try",
-    "family": "sandow",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "currency-btc",
     "family": "sandow",
     "styles": [
@@ -65311,6 +65283,20 @@
   },
   {
     "name": "currency-rub",
+    "family": "sandow",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "currency-try",
     "family": "sandow",
     "styles": [
       "bold",
@@ -65786,20 +65772,6 @@
     "tags": []
   },
   {
-    "name": "egg cracked",
-    "family": "sandow",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "egg-1",
     "family": "sandow",
     "styles": [
@@ -65829,6 +65801,20 @@
   },
   {
     "name": "egg-3",
+    "family": "sandow",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "egg-cracked",
     "family": "sandow",
     "styles": [
       "bold",
@@ -65884,7 +65870,7 @@
     "tags": []
   },
   {
-    "name": "emotion depressed",
+    "name": "emotion-depressed",
     "family": "sandow",
     "styles": [
       "bold",
@@ -67522,6 +67508,20 @@
     "tags": []
   },
   {
+    "name": "hands-droplet",
+    "family": "sandow",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "hands-health-cross",
     "family": "sandow",
     "styles": [
@@ -68041,20 +68041,6 @@
   },
   {
     "name": "ice-skating",
-    "family": "sandow",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "Icon",
     "family": "sandow",
     "styles": [
       "bold",
@@ -72842,7 +72828,7 @@
     "tags": []
   },
   {
-    "name": "shapes-triangle-square-circlce",
+    "name": "shapes-triangle-square-circle",
     "family": "sandow",
     "styles": [
       "bold",
@@ -74592,6 +74578,20 @@
     "tags": []
   },
   {
+    "name": "tongue",
+    "family": "sandow",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "tooth-brace",
     "family": "sandow",
     "styles": [
@@ -74705,20 +74705,6 @@
   },
   {
     "name": "torso-skeleton",
-    "family": "sandow",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "tounge",
     "family": "sandow",
     "styles": [
       "bold",
@@ -76020,20 +76006,6 @@
     "tags": []
   },
   {
-    "name": "arow-shuffle",
-    "family": "turing",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "arrow-backward",
     "family": "turing",
     "styles": [
@@ -76762,6 +76734,20 @@
     "tags": []
   },
   {
+    "name": "arrow-shuffle",
+    "family": "turing",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "arrow-sign-in-1",
     "family": "turing",
     "styles": [
@@ -77322,7 +77308,7 @@
     "tags": []
   },
   {
-    "name": "bacteria-11",
+    "name": "bacteria-2",
     "family": "turing",
     "styles": [
       "bold",
@@ -78064,7 +78050,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-1",
+    "name": "bowl-of-hygieia-1",
     "family": "turing",
     "styles": [
       "bold",
@@ -78078,7 +78064,7 @@
     "tags": []
   },
   {
-    "name": "bowl-of-hygeia-2",
+    "name": "bowl-of-hygieia-2",
     "family": "turing",
     "styles": [
       "bold",
@@ -80444,20 +80430,6 @@
     "tags": []
   },
   {
-    "name": "currecy-try",
-    "family": "turing",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "currency-btc",
     "family": "turing",
     "styles": [
@@ -80599,6 +80571,20 @@
   },
   {
     "name": "currency-rub",
+    "family": "turing",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "currency-try",
     "family": "turing",
     "styles": [
       "bold",
@@ -81074,20 +81060,6 @@
     "tags": []
   },
   {
-    "name": "egg cracked",
-    "family": "turing",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
     "name": "egg-1",
     "family": "turing",
     "styles": [
@@ -81117,6 +81089,20 @@
   },
   {
     "name": "egg-3",
+    "family": "turing",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
+    "name": "egg-cracked",
     "family": "turing",
     "styles": [
       "bold",
@@ -81172,7 +81158,7 @@
     "tags": []
   },
   {
-    "name": "emotion depressed",
+    "name": "emotion-depressed",
     "family": "turing",
     "styles": [
       "bold",
@@ -82810,6 +82796,20 @@
     "tags": []
   },
   {
+    "name": "hands-droplet",
+    "family": "turing",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "hands-health-cross",
     "family": "turing",
     "styles": [
@@ -83301,20 +83301,6 @@
   },
   {
     "name": "ice-skating",
-    "family": "turing",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "Icon",
     "family": "turing",
     "styles": [
       "bold",
@@ -88130,7 +88116,7 @@
     "tags": []
   },
   {
-    "name": "shapes-triangle-square-circlce",
+    "name": "shapes-triangle-square-circle",
     "family": "turing",
     "styles": [
       "bold",
@@ -89880,6 +89866,20 @@
     "tags": []
   },
   {
+    "name": "tongue",
+    "family": "turing",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "categories": [],
+    "tags": []
+  },
+  {
     "name": "tooth-brace",
     "family": "turing",
     "styles": [
@@ -89993,20 +89993,6 @@
   },
   {
     "name": "torso-skeleton",
-    "family": "turing",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "categories": [],
-    "tags": []
-  },
-  {
-    "name": "tounge",
     "family": "turing",
     "styles": [
       "bold",
