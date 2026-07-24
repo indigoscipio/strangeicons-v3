@@ -1,72 +1,224 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import { join, basename, extname } from "path";
+import library from "../data/library.json" with { type: "json" };
 
 const ICONS_DIR     = "./public/icons";
 const SPRITES_DIR   = "./public/sprites";
 const OUTPUT_SRC    = "./src/icons.json";
 const OUTPUT_PUBLIC = "./public/icons.json";
+const REQUIRE_ICONS = process.argv.includes("--require-icons");
 
-mkdirSync(SPRITES_DIR, { recursive: true });
-
-if (!existsSync(ICONS_DIR)) {
-  console.log("⚠ public/icons/ not found — skipping sprite generation");
-  process.exit(0);
+function compareNames(a, b) {
+  const lowerA = a.toLowerCase();
+  const lowerB = b.toLowerCase();
+  if (lowerA < lowerB) return -1;
+  if (lowerA > lowerB) return 1;
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
 
-const result = {};
+const expectedFamilies = [...library.families].sort(compareNames);
+const expectedStyles = [...library.styles].sort(compareNames);
+const expectedSpriteFiles = expectedFamilies.flatMap(family =>
+  expectedStyles.map(style => `${family}-${style}.svg`)
+).sort(compareNames);
 
-// Walk: family → style → icon
-const families = readdirSync(ICONS_DIR);
-
-for (const family of families) {
-  const familyPath = join(ICONS_DIR, family);
-  const styles = readdirSync(familyPath);
-
-  for (const style of styles) {
-    const stylePath = join(familyPath, style);
-    const files = readdirSync(stylePath);
-    const symbols = [];
-
-    for (const file of files) {
-      if (extname(file) !== ".svg") continue;
-
-      const name = basename(file, ".svg");
-      const key = `${family}::${name}`;
-
-      if (!result[key]) {
-        result[key] = {
-          name,
-          family,
-          styles: [],
-          categories: [],
-          tags: [],
-        };
-      }
-
-      result[key].styles.push(style.toLowerCase());
-
-      // Build sprite symbol
-      const svgContent = readFileSync(join(stylePath, file), "utf-8");
-      const match = svgContent.match(
-        /<svg[^>]*viewBox="([^"]+)"[^>]*>([\s\S]*)<\/svg>/i
-      );
-      if (match) {
-        const [, viewBox, inner] = match;
-        symbols.push(
-          `<symbol id="${family}/${style.toLowerCase()}/${name}" viewBox="${viewBox}">\n${inner.trim()}\n</symbol>`
-        );
-      }
-    }
-
-    // Write sprite file
-    const spriteKey = `${family}-${style.toLowerCase()}`;
-    const sprite = `<svg xmlns="http://www.w3.org/2000/svg">\n${symbols.join("\n")}\n</svg>`;
-    writeFileSync(join(SPRITES_DIR, `${spriteKey}.svg`), sprite);
-    console.log(`  ✓ sprite ${spriteKey}.svg (${symbols.length} icons)`);
+function assertSameList(actual, expected, label) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    const detail = expected.length <= 50
+      ? `expected [${expected.join(", ")}], found [${actual.join(", ")}]`
+      : `expected ${expected.length} entries, found ${actual.length}`;
+    throw new Error(`${label}: ${detail}`);
   }
 }
 
-const icons = Object.values(result);
-writeFileSync(OUTPUT_SRC,    JSON.stringify(icons, null, 2));
-writeFileSync(OUTPUT_PUBLIC, JSON.stringify(icons, null, 2));
-console.log(`✓ Built index: ${icons.length} icons, ${families.length} families`);
+function directoryNames(path) {
+  return readdirSync(path, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .sort(compareNames);
+}
+
+function readJson(path, label) {
+  if (!existsSync(path)) throw new Error(`${label} is missing: ${path}`);
+  try {
+    return JSON.parse(readFileSync(path, "utf-8"));
+  } catch {
+    throw new Error(`${label} is not valid JSON: ${path}`);
+  }
+}
+
+function validateCatalog(icons, label) {
+  if (!Array.isArray(icons) || icons.length === 0) {
+    throw new Error(`${label} must contain a non-empty icon array`);
+  }
+  if (icons.length !== library.iconConceptCount) {
+    throw new Error(`${label} contains ${icons.length} concepts; expected ${library.iconConceptCount}`);
+  }
+
+  const keys = new Set();
+  const families = new Set();
+  const styles = new Set();
+  let variantCount = 0;
+
+  for (const icon of icons) {
+    if (!icon || typeof icon.name !== "string" || typeof icon.family !== "string" || !Array.isArray(icon.styles)) {
+      throw new Error(`${label} contains an invalid icon record`);
+    }
+
+    const key = `${icon.family}::${icon.name}`;
+    if (keys.has(key)) throw new Error(`${label} contains duplicate icon record: ${key}`);
+    keys.add(key);
+    families.add(icon.family);
+
+    const iconStyles = [...new Set(icon.styles)].sort(compareNames);
+    assertSameList(iconStyles, expectedStyles, `${label} styles for ${key}`);
+    iconStyles.forEach(style => styles.add(style));
+    variantCount += iconStyles.length;
+  }
+
+  assertSameList([...families].sort(compareNames), expectedFamilies, `${label} families`);
+  assertSameList([...styles].sort(compareNames), expectedStyles, `${label} styles`);
+  if (variantCount !== library.iconVariantCount) {
+    throw new Error(`${label} contains ${variantCount} variants; expected ${library.iconVariantCount}`);
+  }
+}
+
+function validateSprites(icons) {
+  if (!existsSync(SPRITES_DIR)) throw new Error(`Tracked sprite directory is missing: ${SPRITES_DIR}`);
+
+  const spriteFiles = readdirSync(SPRITES_DIR, { withFileTypes: true })
+    .filter(entry => entry.isFile() && extname(entry.name) === ".svg")
+    .map(entry => entry.name)
+    .sort(compareNames);
+  assertSameList(spriteFiles, expectedSpriteFiles, "Tracked sprite files");
+
+  for (const family of expectedFamilies) {
+    for (const style of expectedStyles) {
+      const expectedIds = icons
+        .filter(icon => icon.family === family && icon.styles.includes(style))
+        .map(icon => `${family}/${style}/${icon.name}`)
+        .sort(compareNames);
+      const sprite = readFileSync(join(SPRITES_DIR, `${family}-${style}.svg`), "utf-8");
+      const symbolIds = [...sprite.matchAll(/<symbol\b[^>]*\bid="([^"]+)"/g)]
+        .map(match => match[1])
+        .sort(compareNames);
+      assertSameList(symbolIds, expectedIds, `Sprite symbols for ${family}-${style}.svg`);
+    }
+  }
+}
+
+function validateTrackedFallback() {
+  const sourceIndex = readJson(OUTPUT_SRC, "Source icon index");
+  const publicIndex = readJson(OUTPUT_PUBLIC, "Public icon index");
+  if (JSON.stringify(sourceIndex) !== JSON.stringify(publicIndex)) {
+    throw new Error("Tracked source and public icon indexes do not match");
+  }
+  validateCatalog(sourceIndex, "Tracked icon index");
+  validateSprites(sourceIndex);
+  console.log(`✓ Validated tracked fallback: ${sourceIndex.length} concepts, ${library.iconVariantCount} variants`);
+}
+
+function buildCatalog() {
+  const families = directoryNames(ICONS_DIR);
+  assertSameList(families, expectedFamilies, "Raw icon families");
+
+  const result = {};
+  const sprites = new Map();
+  let sourceSvgCount = 0;
+
+  for (const family of families) {
+    const familyPath = join(ICONS_DIR, family);
+    const styles = directoryNames(familyPath);
+    assertSameList(styles, expectedStyles, `Raw styles for ${family}`);
+
+    for (const style of styles) {
+      const stylePath = join(familyPath, style);
+      const files = readdirSync(stylePath, { withFileTypes: true })
+        .filter(entry => entry.isFile() && extname(entry.name) === ".svg")
+        .map(entry => entry.name)
+        .sort(compareNames);
+      if (files.length === 0) throw new Error(`Raw style directory contains no SVGs: ${stylePath}`);
+
+      const symbols = [];
+      for (const file of files) {
+        const name = basename(file, ".svg");
+        const key = `${family}::${name}`;
+        sourceSvgCount++;
+
+        if (!result[key]) {
+          result[key] = {
+            name,
+            family,
+            styles: [],
+            categories: [],
+            tags: [],
+          };
+        }
+        result[key].styles.push(style);
+
+        const svgContent = readFileSync(join(stylePath, file), "utf-8");
+        const match = svgContent.match(
+          /<svg[^>]*viewBox="([^"]+)"[^>]*>([\s\S]*)<\/svg>/i
+        );
+        if (!match) throw new Error(`SVG cannot be converted to a sprite symbol: ${join(stylePath, file)}`);
+
+        const [, viewBox, inner] = match;
+        symbols.push(
+          `<symbol id="${family}/${style}/${name}" viewBox="${viewBox}">\n${inner.trim()}\n</symbol>`
+        );
+      }
+
+      const spriteFile = `${family}-${style}.svg`;
+      sprites.set(spriteFile, {
+        content: `<svg xmlns="http://www.w3.org/2000/svg">\n${symbols.join("\n")}\n</svg>`,
+        count: symbols.length,
+      });
+    }
+  }
+
+  const icons = Object.values(result);
+  validateCatalog(icons, "Generated icon index");
+  if (sourceSvgCount !== library.iconVariantCount) {
+    throw new Error(`Raw corpus contains ${sourceSvgCount} SVGs; expected ${library.iconVariantCount}`);
+  }
+  assertSameList([...sprites.keys()].sort(compareNames), expectedSpriteFiles, "Generated sprite files");
+  return { icons, sprites };
+}
+
+function writeGeneratedFiles(icons, sprites) {
+  mkdirSync(SPRITES_DIR, { recursive: true });
+
+  const existingSprites = readdirSync(SPRITES_DIR, { withFileTypes: true })
+    .filter(entry => entry.isFile() && extname(entry.name) === ".svg")
+    .map(entry => entry.name);
+  for (const file of existingSprites) {
+    if (!sprites.has(file)) unlinkSync(join(SPRITES_DIR, file));
+  }
+
+  for (const [file, sprite] of sprites) {
+    writeFileSync(join(SPRITES_DIR, file), sprite.content);
+    console.log(`  ✓ sprite ${file} (${sprite.count} icons)`);
+  }
+
+  const json = JSON.stringify(icons, null, 2);
+  writeFileSync(OUTPUT_SRC, json);
+  writeFileSync(OUTPUT_PUBLIC, json);
+  console.log(`✓ Built index: ${icons.length} concepts, ${library.iconVariantCount} variants`);
+}
+
+try {
+  if (!existsSync(ICONS_DIR)) {
+    if (REQUIRE_ICONS) {
+      throw new Error("public/icons/ is required for release generation but was not found");
+    }
+    validateTrackedFallback();
+  } else {
+    const { icons, sprites } = buildCatalog();
+    writeGeneratedFiles(icons, sprites);
+  }
+} catch (error) {
+  console.error(`✗ ${error.message}`);
+  process.exit(1);
+}
