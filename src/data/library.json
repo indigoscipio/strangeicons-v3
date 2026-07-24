@@ -1,0 +1,28 @@
+{
+  "siteVersion": "3.2",
+  "assetReleaseVersion": "3.1",
+  "iconConceptCount": 6498,
+  "iconVariantCount": 38988,
+  "defaultFamily": "asklepios",
+  "defaultStyle": "regular",
+  "families": [
+    "asklepios",
+    "freud",
+    "nightingale",
+    "osler",
+    "sandow",
+    "turing"
+  ],
+  "styles": [
+    "bold",
+    "duoline",
+    "duotone",
+    "fill",
+    "light",
+    "regular"
+  ],
+  "siteUrl": "https://strangeicons.com",
+  "repositoryUrl": "https://github.com/indigoscipio/strangeicons-v3",
+  "releaseUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/tag/v3.1",
+  "downloadUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/download/v3.1/icons.zip"
+}

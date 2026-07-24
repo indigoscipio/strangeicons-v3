@@ -3,6 +3,8 @@
  * Virtual scrolling, SVG sprites, fast filtering.
  */
 
+import library from '../data/library.json';
+
 // ── Config ────────────────────────────────────────────────────────────────────
 const CARD_HEIGHT     = 100;
 const CARD_MIN_WIDTH  = 88;
@@ -13,8 +15,8 @@ const SEARCH_DEBOUNCE = 120;
 // ── State ─────────────────────────────────────────────────────────────────────
 let allIcons      = [];
 let filtered      = [];
-let activeFamily  = null;
-let activeStyle   = 'regular';
+let activeFamily  = library.defaultFamily;
+let activeStyle   = library.defaultStyle;
 let searchQuery   = '';
 let activePanel   = null;
 let colCount      = 1;
@@ -154,7 +156,9 @@ async function init() {
   allIcons = await res.json();
 
   const families = [...new Set(allIcons.map(i => i.family))].sort();
-  activeFamily = families[0] ?? null;
+  activeFamily = families.includes(library.defaultFamily)
+    ? library.defaultFamily
+    : families[0] ?? null;
 
   // Seed cache with inlined sprite symbols
   const inlinedSymbols = Array.from(document.querySelectorAll('#sprite-sheet > symbol'));

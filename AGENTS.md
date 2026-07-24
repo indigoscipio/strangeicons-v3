@@ -34,9 +34,11 @@
 - Virtual-scroll constants in `app.js` are coupled to `IconGrid.astro`: `CARD_MIN_WIDTH = 88` matches `5.5rem`, `CARD_GAP = 6` matches `0.375rem`, and `CARD_HEIGHT = 100` matches the 94px card plus 6px gap.
 - Preserve tracked filename casing, especially `src/components/IconGrid.astro`, for case-sensitive builds.
 
-## Release Strings
+## Product Metadata
 
-- Version, count, and release URLs are independently hard-coded in `README.md`, `src/components/Sidebar.astro`, and `src/layouts/Layout.astro`. Check all three when publishing a version or changing advertised icon counts.
+- `src/data/library.json` is the source of truth for website/release versions, exact catalog counts, expected families/styles, defaults, and release URLs.
+- Website and downloadable asset versions are separate because a website release may not publish a new icon ZIP. `package.json` version is the internal Astro app package version, not the product version.
+- `README.md` mirrors selected release metadata but cannot import the JSON source; update and verify it when publishing releases.
 
 ## Change Discipline
 

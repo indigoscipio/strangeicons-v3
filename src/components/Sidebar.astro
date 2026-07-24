@@ -1,26 +1,32 @@
 ---
+import library from '../data/library.json';
+
 interface Props {
   families: string[];
   styles:   string[];
 }
 const { families, styles } = Astro.props;
-const DEFAULT_STYLE = 'regular';
+const defaultFamily = families.includes(library.defaultFamily)
+  ? library.defaultFamily
+  : families[0];
+const conceptCount = library.iconConceptCount.toLocaleString('en-US');
+const variantCount = library.iconVariantCount.toLocaleString('en-US');
 ---
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <img src="/logo.svg" alt="strangeicons" class="brand-logo" />
-    <span class="version-badge">v3.2</span>
+    <span class="version-badge">v{library.siteVersion}</span>
   </div>
 
   <nav class="sidebar-nav">
     <div class="nav-section">
       <span class="nav-label">Family</span>
       <ul class="nav-list" id="family-list">
-        {families.map((family, i) => (
+        {families.map((family) => (
           <li>
             <button
-              class={`nav-item${i === 0 ? ' active' : ''}`}
+              class={`nav-item${family === defaultFamily ? ' active' : ''}`}
               data-filter="family"
               data-value={family}
             >
@@ -38,7 +44,7 @@ const DEFAULT_STYLE = 'regular';
         {styles.map((style) => (
           <li>
             <button
-              class={`nav-item${style === DEFAULT_STYLE ? ' active' : ''}`}
+              class={`nav-item${style === library.defaultStyle ? ' active' : ''}`}
               data-filter="style"
               data-value={style}
             >
@@ -54,9 +60,9 @@ const DEFAULT_STYLE = 'regular';
   <div class="sidebar-footer">
     <div class="sidebar-ctas">
       <a href="https://www.figma.com/community/plugin/1444854975916128113/strangeicons-healthcare-biotech-ui-icons" target="_blank" rel="noopener" class="cta-btn primary">Figma Plugin 🤖</a>
-      <a href="https://github.com/indigoscipio/strangeicons-v3/releases/download/v3.1/icons.zip" target="_blank" rel="noopener" class="cta-btn secondary">Download All 📦</a>
+      <a href={library.downloadUrl} target="_blank" rel="noopener" class="cta-btn secondary">Download All 📦</a>
     </div>
-    <span class="count-badge">39,000+ icons · 6 families</span>
+    <span class="count-badge">{conceptCount} icons · {variantCount} variants</span>
   </div>
 </aside>
 
