@@ -12,6 +12,7 @@
 - Requires Node `>=22.12.0`; dependencies are locked with `package-lock.json`.
 - Use `npm run dev`, not the VS Code launch task: the launch task runs `astro dev` directly and skips index generation.
 - `npm run build:index` regenerates icon metadata and sprites.
+- `npm run audit:icons` performs a read-only raw/generated asset audit; findings are grouped and the command exits nonzero when errors exist.
 - `npm run build` runs `build:index` before the Astro static build.
 - `npm run build:release` requires the complete raw icon corpus, validates it, regenerates tracked artifacts, and then builds the static site. Use it for official asset releases.
 - `npm run preview` serves the existing `dist/`; run `npm run build` first.

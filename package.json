@@ -8,6 +8,8 @@
   "scripts": {
     "build:index": "node src/scripts/build-index.js",
     "build:index:release": "node src/scripts/build-index.js --require-icons",
+    "audit:icons": "node src/scripts/audit-icons.js",
+    "audit:icons:release": "node src/scripts/audit-icons.js --require-icons",
     "dev": "npm run build:index && astro dev",
     "build": "npm run build:index && astro build",
     "build:release": "npm run build:index:release && astro build",
