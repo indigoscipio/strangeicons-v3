@@ -147,3 +147,115 @@ test('returns no results when any query token is absent', () => {
 
   assert.deepEqual(searchNames(icons, 'heart missing'), []);
 });
+
+test('fuzzy fallback handles one-edit insertions, deletions, and substitutions', () => {
+  const icons = [icon('hand-pill', { aliases: ['medicine'] })];
+
+  assert.deepEqual(searchNames(icons, 'mediciine'), ['hand-pill']);
+  assert.deepEqual(searchNames(icons, 'medcine'), ['hand-pill']);
+  assert.deepEqual(searchNames(icons, 'medixine'), ['hand-pill']);
+});
+
+test('fuzzy fallback treats adjacent transpositions as one edit', () => {
+  const icons = [icon('heart-monitor')];
+
+  assert.deepEqual(searchNames(icons, 'moniotr'), ['heart-monitor']);
+});
+
+test('long terms allow two edits while medium terms allow only one', () => {
+  const icons = [
+    icon('electrocardiogram'),
+    icon('medicine'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'electrocardioxxam'), ['electrocardiogram']);
+  assert.deepEqual(searchNames(icons, 'medxxine'), []);
+});
+
+test('short and numeric terms require exact matches', () => {
+  const icons = [
+    icon('alarm'),
+    icon('dose-1234'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'alrm'), []);
+  assert.deepEqual(searchNames(icons, '1235'), []);
+});
+
+test('fuzzy fallback searches aliases but not categories', () => {
+  const icons = [
+    icon('hand-pill', { aliases: ['medicine'] }),
+    icon('medical-symbol', { category: 'cardiology' }),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'medcine'), ['hand-pill']);
+  assert.deepEqual(searchNames(icons, 'cardiolgy'), []);
+});
+
+test('multi-word fuzzy terms must match within one name or alias', () => {
+  const icons = [
+    icon('heart-device', { aliases: ['monitor'] }),
+    icon('heart-monitor'),
+    icon('portable-device', { aliases: ['heart monitor'] }),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'heart monitro'), ['heart-monitor', 'portable-device']);
+});
+
+test('deterministic results prevent fuzzy fallback from adding guesses', () => {
+  const icons = [
+    icon('medicine', { aliases: ['medication'] }),
+    icon('medcine-guide'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'medcine'), ['medcine-guide']);
+});
+
+test('fuzzy fallback returns only records at the best total distance', () => {
+  const icons = [
+    icon('electrocardioxxam'),
+    icon('electrocardioxram'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'electrocardiogram'), ['electrocardioxram']);
+});
+
+test('canonical fuzzy matches outrank alias matches at equal distance', () => {
+  const icons = [
+    icon('pill-symbol', { aliases: ['medicine'] }),
+    icon('medicine'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'medcine'), ['medicine', 'pill-symbol']);
+});
+
+test('equal fuzzy scores preserve original catalog order', () => {
+  const icons = [
+    icon('medline'),
+    icon('medicine'),
+    icon('medmine'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'medcine'), ['medline', 'medicine', 'medmine']);
+});
+
+test('family and style filters apply before fuzzy fallback', () => {
+  const icons = [
+    icon('medicine', { family: 'freud' }),
+    icon('medicine', { styles: ['bold'] }),
+    icon('hand-pill', { aliases: ['medicine'] }),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'medcine'), ['hand-pill']);
+  assert.deepEqual(searchNames(icons, 'medcine', { family: 'freud' }), ['medicine']);
+  assert.deepEqual(searchNames(icons, 'medcine', { style: 'bold' }), ['medicine']);
+});
+
+test('short deterministic substrings do not trigger or append fuzzy results', () => {
+  const icons = [
+    icon('alarm'),
+    icon('forearm'),
+  ];
+
+  assert.deepEqual(searchNames(icons, 'arm'), ['alarm', 'forearm']);
+});
