@@ -4,6 +4,7 @@
  */
 
 import library from '../data/library.json';
+import { createSearchIndex, searchIcons } from './search.js';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 const CARD_HEIGHT     = 100;
@@ -14,6 +15,7 @@ const SEARCH_DEBOUNCE = 120;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let allIcons      = [];
+let searchIndex   = [];
 let filtered      = [];
 let activeFamily  = library.defaultFamily;
 let activeStyle   = library.defaultStyle;
@@ -154,6 +156,7 @@ async function init() {
   const res = await fetch('/icons.json');
   if (!res.ok) throw new Error('icons.json could not be loaded');
   allIcons = await res.json();
+  searchIndex = createSearchIndex(allIcons);
 
   const families = [...new Set(allIcons.map(i => i.family))].sort();
   activeFamily = families.includes(library.defaultFamily)
@@ -185,16 +188,10 @@ async function refilter(scrollToTop = false) {
   closePanel();
   isFiltering = true;
 
-  const terms = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  filtered = allIcons.filter(icon => {
-    if (activeFamily && icon.family !== activeFamily) return false;
-    if (activeStyle !== 'all' && !icon.styles.includes(activeStyle)) return false;
-    if (terms.length > 0) {
-      const searchValues = [icon.name, ...(icon.aliases ?? []), icon.category ?? '']
-        .map(value => value.toLowerCase());
-      if (!terms.every(term => searchValues.some(value => value.includes(term)))) return false;
-    }
-    return true;
+  filtered = searchIcons(searchIndex, {
+    family: activeFamily,
+    style: activeStyle,
+    query: searchQuery,
   });
 
   resultCount.textContent = filtered.length > 0 ? `${filtered.length} icons` : '';

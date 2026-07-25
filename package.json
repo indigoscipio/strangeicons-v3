@@ -12,6 +12,7 @@
     "audit:icons:release": "node src/scripts/audit-icons.js --require-icons",
     "icons:rename": "node src/scripts/apply-icon-renames.js",
     "icons:rename:apply": "node src/scripts/apply-icon-renames.js --apply",
+    "test:search": "node --test test/search.test.js",
     "dev": "npm run build:index && astro dev",
     "build": "npm run build:index && astro build",
     "build:release": "npm run build:index:release && astro build",

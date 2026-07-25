@@ -16,7 +16,7 @@
 - `npm run build` runs `build:index` before the Astro static build.
 - `npm run build:release` requires the complete raw icon corpus, validates it, regenerates tracked artifacts, and then builds the static site. Use it for official asset releases.
 - `npm run preview` serves the existing `dist/`; run `npm run build` first.
-- There are no test, lint, formatter, or standalone typecheck scripts. Use `npm run build` as the full verification step.
+- `npm run test:search` runs focused deterministic search tests with Node's built-in runner. There are no lint, formatter, or standalone typecheck scripts; use `npm run build` as the full verification step.
 - If Windows PowerShell blocks `npm.ps1`, run commands through `cmd`, for example `cmd /c "npm run build"`.
 
 ## Icon Pipeline
