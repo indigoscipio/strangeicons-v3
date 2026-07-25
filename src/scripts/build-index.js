@@ -6,7 +6,10 @@ const ICONS_DIR     = "./public/icons";
 const SPRITES_DIR   = "./public/sprites";
 const OUTPUT_SRC    = "./src/icons.json";
 const OUTPUT_PUBLIC = "./public/icons.json";
+const METADATA_FILE = "./src/data/icon-metadata.json";
 const REQUIRE_ICONS = process.argv.includes("--require-icons");
+const VALID_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const VALID_ALIAS = /^[a-z0-9]+(?:[ -][a-z0-9]+)*$/;
 
 function compareNames(a, b) {
   const lowerA = a.toLowerCase();
@@ -49,7 +52,71 @@ function readJson(path, label) {
   }
 }
 
-function validateCatalog(icons, label) {
+function normalizedSearchValue(value) {
+  return value.replaceAll("-", " ").replace(/\s+/g, " ").trim();
+}
+
+function readIconMetadata(canonicalNames) {
+  if (!Array.isArray(library.iconCategories) || library.iconCategories.length === 0) {
+    throw new Error("Library icon categories must contain a non-empty array");
+  }
+  for (const category of library.iconCategories) {
+    if (typeof category !== "string" || !VALID_NAME.test(category)) {
+      throw new Error(`Library contains an invalid icon category: ${category}`);
+    }
+  }
+  assertSameList(
+    library.iconCategories,
+    [...new Set(library.iconCategories)].sort(compareNames),
+    "Library icon categories"
+  );
+
+  const metadata = readJson(METADATA_FILE, "Icon metadata");
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+    throw new Error("Icon metadata must contain an object keyed by canonical icon name");
+  }
+
+  const names = Object.keys(metadata);
+  assertSameList(names, [...names].sort(compareNames), "Icon metadata names");
+  const validCategories = new Set(library.iconCategories);
+
+  for (const name of names) {
+    if (!VALID_NAME.test(name)) throw new Error(`Icon metadata contains an invalid canonical name: ${name}`);
+    if (!canonicalNames.has(name)) throw new Error(`Icon metadata references an unknown canonical name: ${name}`);
+
+    const entry = metadata[name];
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+      throw new Error(`Icon metadata entry must be an object: ${name}`);
+    }
+    assertSameList(Object.keys(entry).sort(compareNames), ["aliases", "category"], `Icon metadata fields for ${name}`);
+    if (!Array.isArray(entry.aliases)) throw new Error(`Icon metadata aliases must be an array: ${name}`);
+    if (typeof entry.category !== "string" || !validCategories.has(entry.category)) {
+      throw new Error(`Icon metadata contains an invalid category for ${name}: ${entry.category}`);
+    }
+
+    for (const alias of entry.aliases) {
+      if (typeof alias !== "string" || !VALID_ALIAS.test(alias)) {
+        throw new Error(`Icon metadata contains an invalid alias for ${name}: ${alias}`);
+      }
+      if (normalizedSearchValue(alias) === normalizedSearchValue(name)) {
+        throw new Error(`Icon metadata alias duplicates its canonical name: ${name} -> ${alias}`);
+      }
+    }
+    assertSameList(entry.aliases, [...new Set(entry.aliases)].sort(compareNames), `Icon metadata aliases for ${name}`);
+  }
+
+  return metadata;
+}
+
+function applyIconMetadata(icons, metadata) {
+  for (const icon of icons) {
+    const entry = metadata[icon.name];
+    icon.aliases = entry ? [...entry.aliases] : [];
+    icon.category = entry?.category ?? null;
+  }
+}
+
+function validateCatalog(icons, label, metadata) {
   if (!Array.isArray(icons) || icons.length === 0) {
     throw new Error(`${label} must contain a non-empty icon array`);
   }
@@ -69,6 +136,19 @@ function validateCatalog(icons, label) {
 
     const key = `${icon.family}::${icon.name}`;
     if (keys.has(key)) throw new Error(`${label} contains duplicate icon record: ${key}`);
+    assertSameList(
+      Object.keys(icon).sort(compareNames),
+      ["aliases", "category", "family", "name", "styles"],
+      `${label} fields for ${key}`
+    );
+    const expectedMetadata = metadata[icon.name];
+    const expectedAliases = expectedMetadata?.aliases ?? [];
+    const expectedCategory = expectedMetadata?.category ?? null;
+    if (!Array.isArray(icon.aliases)) throw new Error(`${label} contains invalid aliases for ${key}`);
+    assertSameList(icon.aliases, expectedAliases, `${label} aliases for ${key}`);
+    if (icon.category !== expectedCategory) {
+      throw new Error(`${label} category for ${key}: expected ${expectedCategory}, found ${icon.category}`);
+    }
     keys.add(key);
     families.add(icon.family);
 
@@ -115,7 +195,8 @@ function validateTrackedFallback() {
   if (JSON.stringify(sourceIndex) !== JSON.stringify(publicIndex)) {
     throw new Error("Tracked source and public icon indexes do not match");
   }
-  validateCatalog(sourceIndex, "Tracked icon index");
+  const metadata = readIconMetadata(new Set(sourceIndex.map(icon => icon?.name).filter(Boolean)));
+  validateCatalog(sourceIndex, "Tracked icon index", metadata);
   validateSprites(sourceIndex);
   console.log(`✓ Validated tracked fallback: ${sourceIndex.length} concepts, ${library.iconVariantCount} variants`);
 }
@@ -152,8 +233,6 @@ function buildCatalog() {
             name,
             family,
             styles: [],
-            categories: [],
-            tags: [],
           };
         }
         result[key].styles.push(style);
@@ -179,7 +258,9 @@ function buildCatalog() {
   }
 
   const icons = Object.values(result);
-  validateCatalog(icons, "Generated icon index");
+  const metadata = readIconMetadata(new Set(icons.map(icon => icon.name)));
+  applyIconMetadata(icons, metadata);
+  validateCatalog(icons, "Generated icon index", metadata);
   if (sourceSvgCount !== library.iconVariantCount) {
     throw new Error(`Raw corpus contains ${sourceSvgCount} SVGs; expected ${library.iconVariantCount}`);
   }

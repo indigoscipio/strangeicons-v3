@@ -185,11 +185,15 @@ async function refilter(scrollToTop = false) {
   closePanel();
   isFiltering = true;
 
-  const q = searchQuery.trim().toLowerCase();
+  const terms = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean);
   filtered = allIcons.filter(icon => {
     if (activeFamily && icon.family !== activeFamily) return false;
     if (activeStyle !== 'all' && !icon.styles.includes(activeStyle)) return false;
-    if (q && !q.split(/\s+/).every(t => icon.name.toLowerCase().includes(t))) return false;
+    if (terms.length > 0) {
+      const searchValues = [icon.name, ...(icon.aliases ?? []), icon.category ?? '']
+        .map(value => value.toLowerCase());
+      if (!terms.every(term => searchValues.some(value => value.includes(term)))) return false;
+    }
     return true;
   });
 

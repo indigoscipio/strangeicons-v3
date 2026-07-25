@@ -6,7 +6,9 @@ const ICONS_DIR = "./public/icons";
 const SPRITES_DIR = "./public/sprites";
 const OUTPUT_SRC = "./src/icons.json";
 const OUTPUT_PUBLIC = "./public/icons.json";
+const METADATA_FILE = "./src/data/icon-metadata.json";
 const VALID_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const VALID_ALIAS = /^[a-z0-9]+(?:[ -][a-z0-9]+)*$/;
 const RENDERABLE_ELEMENT = /<(path|rect|circle|ellipse|line|polyline|polygon|use|image|text)\b/i;
 const GENERATOR_SVG = /<svg[^>]*viewBox="([^"]+)"[^>]*>([\s\S]*)<\/svg>/i;
 const MAX_EXAMPLES = 10;
@@ -77,6 +79,10 @@ function normalizedViewBox(value) {
   return value.trim().replaceAll(",", " ").replace(/\s+/g, " ");
 }
 
+function normalizedSearchValue(value) {
+  return value.replaceAll("-", " ").replace(/\s+/g, " ").trim();
+}
+
 function hasBalancedTags(svg) {
   const stack = [];
   const source = svg.replace(/<!--[\s\S]*?-->/g, "");
@@ -107,16 +113,120 @@ function localReferences(svg) {
   return references;
 }
 
-function readJson(path, label) {
+function readJson(path, label, missingCode = "GENERATED_FILE_MISSING", invalidCode = "GENERATED_JSON_INVALID") {
   if (!existsSync(path)) {
-    addFinding("ERROR", "GENERATED_FILE_MISSING", `${label}: ${path}`);
+    addFinding("ERROR", missingCode, `${label}: ${path}`);
     return null;
   }
   try {
     return JSON.parse(readFileSync(path, "utf-8"));
   } catch {
-    addFinding("ERROR", "GENERATED_JSON_INVALID", `${label}: ${path}`);
+    addFinding("ERROR", invalidCode, `${label}: ${path}`);
     return null;
+  }
+}
+
+function canonicalNamesFromCatalog(catalog) {
+  return new Set([...catalog.keys()].map(key => key.slice(key.indexOf("::") + 2)));
+}
+
+function auditIconMetadata(canonicalNames) {
+  let valid = true;
+  if (!Array.isArray(library.iconCategories) || library.iconCategories.length === 0) {
+    addFinding("ERROR", "METADATA_CATEGORY_INVENTORY", "library iconCategories must be a non-empty array");
+    valid = false;
+  } else {
+    for (const category of library.iconCategories) {
+      if (typeof category !== "string" || !VALID_NAME.test(category)) {
+        addFinding("ERROR", "METADATA_CATEGORY_INVENTORY", String(category));
+        valid = false;
+      }
+    }
+    if (!sameList(library.iconCategories, [...new Set(library.iconCategories)].sort(compareNames))) {
+      addFinding("ERROR", "METADATA_CATEGORY_INVENTORY", "categories must be unique and sorted");
+      valid = false;
+    }
+  }
+
+  const metadata = readJson(METADATA_FILE, "icon metadata", "METADATA_FILE_MISSING", "METADATA_JSON_INVALID");
+  if (!metadata) return null;
+  if (typeof metadata !== "object" || Array.isArray(metadata)) {
+    addFinding("ERROR", "METADATA_ROOT_INVALID", "metadata must be an object keyed by canonical icon name");
+    return null;
+  }
+
+  const names = Object.keys(metadata);
+  if (!sameList(names, [...names].sort(compareNames))) {
+    addFinding("ERROR", "METADATA_NAME_ORDER", "canonical names must be sorted");
+    valid = false;
+  }
+  const validCategories = new Set(Array.isArray(library.iconCategories) ? library.iconCategories : []);
+
+  for (const name of names) {
+    if (!VALID_NAME.test(name)) {
+      addFinding("ERROR", "METADATA_NAME_INVALID", name);
+      valid = false;
+    }
+    if (!canonicalNames.has(name)) {
+      addFinding("ERROR", "METADATA_NAME_UNKNOWN", name);
+      valid = false;
+    }
+
+    const entry = metadata[name];
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+      addFinding("ERROR", "METADATA_ENTRY_INVALID", name);
+      valid = false;
+      continue;
+    }
+    if (!sameList(Object.keys(entry).sort(compareNames), ["aliases", "category"])) {
+      addFinding("ERROR", "METADATA_FIELDS_INVALID", name);
+      valid = false;
+    }
+    if (!Array.isArray(entry.aliases)) {
+      addFinding("ERROR", "METADATA_ALIASES_INVALID", name);
+      valid = false;
+    } else {
+      for (const alias of entry.aliases) {
+        if (typeof alias !== "string" || !VALID_ALIAS.test(alias)) {
+          addFinding("ERROR", "METADATA_ALIAS_INVALID", `${name}: ${alias}`);
+          valid = false;
+        } else if (normalizedSearchValue(alias) === normalizedSearchValue(name)) {
+          addFinding("ERROR", "METADATA_ALIAS_CANONICAL", `${name}: ${alias}`);
+          valid = false;
+        }
+      }
+      if (!sameList(entry.aliases, [...new Set(entry.aliases)].sort(compareNames))) {
+        addFinding("ERROR", "METADATA_ALIAS_ORDER", name);
+        valid = false;
+      }
+    }
+    if (typeof entry.category !== "string" || !validCategories.has(entry.category)) {
+      addFinding("ERROR", "METADATA_CATEGORY_INVALID", `${name}: ${entry.category}`);
+      valid = false;
+    }
+  }
+
+  return valid ? metadata : null;
+}
+
+function auditGeneratedMetadata(icons, metadata) {
+  if (!Array.isArray(icons)) return;
+
+  for (const icon of icons) {
+    if (!icon || typeof icon.name !== "string" || typeof icon.family !== "string") continue;
+    const key = `${icon.family}::${icon.name}`;
+    const expected = metadata[icon.name];
+    const expectedAliases = expected?.aliases ?? [];
+    const expectedCategory = expected?.category ?? null;
+    if (!sameList(Object.keys(icon).sort(compareNames), ["aliases", "category", "family", "name", "styles"])) {
+      addFinding("ERROR", "GENERATED_METADATA_FIELDS", key);
+    }
+    if (!Array.isArray(icon.aliases) || !sameList(icon.aliases, expectedAliases)) {
+      addFinding("ERROR", "GENERATED_METADATA_ALIASES", key);
+    }
+    if (icon.category !== expectedCategory) {
+      addFinding("ERROR", "GENERATED_METADATA_CATEGORY", key);
+    }
   }
 }
 
@@ -192,6 +302,11 @@ function auditGenerated(catalog) {
   const generatedCatalog = catalogFromIndex(sourceIndex || [], "source index");
   validateCatalog(generatedCatalog, "generated index", !catalog);
   if (catalog) compareCatalogs(generatedCatalog, catalog, "raw corpus versus generated index");
+  const canonicalNames = catalog
+    ? canonicalNamesFromCatalog(catalog)
+    : new Set((sourceIndex || []).map(icon => icon?.name).filter(Boolean));
+  const metadata = auditIconMetadata(canonicalNames);
+  if (metadata) auditGeneratedMetadata(sourceIndex, metadata);
 
   if (!existsSync(SPRITES_DIR)) {
     addFinding("ERROR", "SPRITE_DIRECTORY_MISSING", SPRITES_DIR);

@@ -1,0 +1,248 @@
+{
+  "antibody": {
+    "aliases": [
+      "immunoglobulin"
+    ],
+    "category": "infectious-disease"
+  },
+  "bacteria": {
+    "aliases": [
+      "bacterium",
+      "germ",
+      "microbe"
+    ],
+    "category": "infectious-disease"
+  },
+  "bone": {
+    "aliases": [
+      "skeletal"
+    ],
+    "category": "anatomy"
+  },
+  "bone-crack": {
+    "aliases": [
+      "bone fracture",
+      "broken bone",
+      "fracture"
+    ],
+    "category": "anatomy"
+  },
+  "brain-1": {
+    "aliases": [
+      "cerebral",
+      "encephalon",
+      "neurology"
+    ],
+    "category": "anatomy"
+  },
+  "cancer-cell-1": {
+    "aliases": [
+      "cancer",
+      "malignant cell",
+      "oncology",
+      "tumor cell"
+    ],
+    "category": "genetics-biotechnology"
+  },
+  "crutches": {
+    "aliases": [
+      "mobility aid",
+      "walking aid"
+    ],
+    "category": "accessibility"
+  },
+  "dna": {
+    "aliases": [
+      "deoxyribonucleic acid",
+      "genetics",
+      "genome"
+    ],
+    "category": "genetics-biotechnology"
+  },
+  "drug-container-1": {
+    "aliases": [
+      "medication bottle",
+      "medicine bottle",
+      "pill bottle"
+    ],
+    "category": "pharmacy-medication"
+  },
+  "ecg-vital-sign": {
+    "aliases": [
+      "ecg",
+      "ekg",
+      "electrocardiogram",
+      "heart monitor"
+    ],
+    "category": "cardiology"
+  },
+  "emergency": {
+    "aliases": [
+      "first aid",
+      "medical emergency",
+      "urgent care"
+    ],
+    "category": "emergency-care"
+  },
+  "hand-pill": {
+    "aliases": [
+      "medication",
+      "medicine",
+      "pill in hand"
+    ],
+    "category": "pharmacy-medication"
+  },
+  "heart": {
+    "aliases": [
+      "cardiac",
+      "cardiovascular"
+    ],
+    "category": "cardiology"
+  },
+  "heart-ecg": {
+    "aliases": [
+      "ecg",
+      "ekg",
+      "electrocardiogram",
+      "heart monitor"
+    ],
+    "category": "cardiology"
+  },
+  "hospital": {
+    "aliases": [
+      "clinic",
+      "healthcare facility",
+      "medical center"
+    ],
+    "category": "healthcare-settings"
+  },
+  "iv-bag-1": {
+    "aliases": [
+      "intravenous",
+      "intravenous drip",
+      "iv",
+      "iv drip"
+    ],
+    "category": "treatment-procedures"
+  },
+  "kidney": {
+    "aliases": [
+      "renal"
+    ],
+    "category": "anatomy"
+  },
+  "kidneys": {
+    "aliases": [
+      "renal"
+    ],
+    "category": "anatomy"
+  },
+  "liver-1": {
+    "aliases": [
+      "hepatic"
+    ],
+    "category": "anatomy"
+  },
+  "lung": {
+    "aliases": [
+      "pulmonary",
+      "respiratory organ"
+    ],
+    "category": "anatomy"
+  },
+  "microscope-1": {
+    "aliases": [
+      "microscopy"
+    ],
+    "category": "laboratory"
+  },
+  "oxygen-tank": {
+    "aliases": [
+      "oxygen cylinder",
+      "supplemental oxygen"
+    ],
+    "category": "treatment-procedures"
+  },
+  "prescription": {
+    "aliases": [
+      "medication order",
+      "rx"
+    ],
+    "category": "pharmacy-medication"
+  },
+  "rna": {
+    "aliases": [
+      "ribonucleic acid",
+      "transcriptome"
+    ],
+    "category": "genetics-biotechnology"
+  },
+  "scalpel": {
+    "aliases": [
+      "surgery",
+      "surgical blade"
+    ],
+    "category": "treatment-procedures"
+  },
+  "stethoscope": {
+    "aliases": [
+      "auscultation",
+      "medical listening device"
+    ],
+    "category": "diagnostics-imaging"
+  },
+  "syringe-1": {
+    "aliases": [
+      "injection",
+      "needle",
+      "shot"
+    ],
+    "category": "treatment-procedures"
+  },
+  "test-tube-1": {
+    "aliases": [
+      "laboratory tube",
+      "sample tube",
+      "specimen tube"
+    ],
+    "category": "laboratory"
+  },
+  "truck-ambulance": {
+    "aliases": [
+      "ambulance",
+      "emergency vehicle",
+      "ems"
+    ],
+    "category": "emergency-care"
+  },
+  "vaccine": {
+    "aliases": [
+      "immunization",
+      "inoculation",
+      "vaccination"
+    ],
+    "category": "pharmacy-medication"
+  },
+  "virus-1": {
+    "aliases": [
+      "pathogen",
+      "viral particle"
+    ],
+    "category": "infectious-disease"
+  },
+  "wheelchair": {
+    "aliases": [
+      "mobility aid",
+      "mobility chair"
+    ],
+    "category": "accessibility"
+  },
+  "xray": {
+    "aliases": [
+      "radiograph",
+      "radiography",
+      "x-ray"
+    ],
+    "category": "diagnostics-imaging"
+  }
+}

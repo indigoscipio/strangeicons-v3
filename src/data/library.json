@@ -21,6 +21,19 @@
     "light",
     "regular"
   ],
+  "iconCategories": [
+    "accessibility",
+    "anatomy",
+    "cardiology",
+    "diagnostics-imaging",
+    "emergency-care",
+    "genetics-biotechnology",
+    "healthcare-settings",
+    "infectious-disease",
+    "laboratory",
+    "pharmacy-medication",
+    "treatment-procedures"
+  ],
   "siteUrl": "https://strangeicons.com",
   "repositoryUrl": "https://github.com/indigoscipio/strangeicons-v3",
   "releaseUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/tag/v3.1",
