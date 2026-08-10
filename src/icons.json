@@ -562,6 +562,20 @@
     "category": null
   },
   {
+    "name": "arrow-download",
+    "family": "asklepios",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "aliases": [],
+    "category": null
+  },
+  {
     "name": "arrow-fat-down",
     "family": "asklepios",
     "styles": [
@@ -1262,20 +1276,6 @@
     "category": null
   },
   {
-    "name": "arrow-upload-1",
-    "family": "asklepios",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "aliases": [],
-    "category": null
-  },
-  {
     "name": "arrow-upload",
     "family": "asklepios",
     "styles": [
@@ -1542,7 +1542,7 @@
     "category": null
   },
   {
-    "name": "bacteria",
+    "name": "bacteria-3",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -4165,7 +4165,7 @@
     "category": null
   },
   {
-    "name": "cloud-rain",
+    "name": "cloud-rain-2",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -7227,7 +7227,7 @@
     "category": null
   },
   {
-    "name": "heart-1",
+    "name": "heart-anatomical",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -13035,7 +13035,7 @@
     "category": null
   },
   {
-    "name": "spine",
+    "name": "spine-2",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -13248,7 +13248,7 @@
     "category": null
   },
   {
-    "name": "stomach",
+    "name": "stomach-2",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -13770,7 +13770,7 @@
     "category": null
   },
   {
-    "name": "tennis-1",
+    "name": "tennis-ball",
     "family": "asklepios",
     "styles": [
       "bold",
@@ -15824,6 +15824,20 @@
     "category": null
   },
   {
+    "name": "arrow-download",
+    "family": "freud",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "aliases": [],
+    "category": null
+  },
+  {
     "name": "arrow-fat-down",
     "family": "freud",
     "styles": [
@@ -16538,20 +16552,6 @@
     "category": null
   },
   {
-    "name": "arrow-upload-1",
-    "family": "freud",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "aliases": [],
-    "category": null
-  },
-  {
     "name": "arrow-upload",
     "family": "freud",
     "styles": [
@@ -16818,7 +16818,7 @@
     "category": null
   },
   {
-    "name": "bacteria",
+    "name": "bacteria-3",
     "family": "freud",
     "styles": [
       "bold",
@@ -19455,7 +19455,7 @@
     "category": null
   },
   {
-    "name": "cloud-rain",
+    "name": "cloud-rain-2",
     "family": "freud",
     "styles": [
       "bold",
@@ -22615,7 +22615,7 @@
     "category": null
   },
   {
-    "name": "heart-1",
+    "name": "heart-anatomical",
     "family": "freud",
     "styles": [
       "bold",
@@ -28437,7 +28437,7 @@
     "category": null
   },
   {
-    "name": "spine",
+    "name": "spine-2",
     "family": "freud",
     "styles": [
       "bold",
@@ -28650,7 +28650,7 @@
     "category": null
   },
   {
-    "name": "stomach",
+    "name": "stomach-2",
     "family": "freud",
     "styles": [
       "bold",
@@ -29172,7 +29172,7 @@
     "category": null
   },
   {
-    "name": "tennis-1",
+    "name": "tennis-ball",
     "family": "freud",
     "styles": [
       "bold",
@@ -31212,6 +31212,20 @@
     "category": null
   },
   {
+    "name": "arrow-download",
+    "family": "nightingale",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "aliases": [],
+    "category": null
+  },
+  {
     "name": "arrow-fat-down",
     "family": "nightingale",
     "styles": [
@@ -31912,20 +31926,6 @@
     "category": null
   },
   {
-    "name": "arrow-upload-1",
-    "family": "nightingale",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "aliases": [],
-    "category": null
-  },
-  {
     "name": "arrow-upload",
     "family": "nightingale",
     "styles": [
@@ -32192,7 +32192,7 @@
     "category": null
   },
   {
-    "name": "bacteria",
+    "name": "bacteria-3",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -34815,7 +34815,7 @@
     "category": null
   },
   {
-    "name": "cloud-rain",
+    "name": "cloud-rain-2",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -37877,7 +37877,7 @@
     "category": null
   },
   {
-    "name": "heart-1",
+    "name": "heart-anatomical",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -43615,7 +43615,7 @@
     "category": null
   },
   {
-    "name": "spine",
+    "name": "spine-2",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -44350,7 +44350,7 @@
     "category": null
   },
   {
-    "name": "tennis-1",
+    "name": "tennis-ball",
     "family": "nightingale",
     "styles": [
       "bold",
@@ -46390,6 +46390,20 @@
     "category": null
   },
   {
+    "name": "arrow-download",
+    "family": "osler",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "aliases": [],
+    "category": null
+  },
+  {
     "name": "arrow-fat-down",
     "family": "osler",
     "styles": [
@@ -47090,20 +47104,6 @@
     "category": null
   },
   {
-    "name": "arrow-upload-1",
-    "family": "osler",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "aliases": [],
-    "category": null
-  },
-  {
     "name": "arrow-upload",
     "family": "osler",
     "styles": [
@@ -47370,7 +47370,7 @@
     "category": null
   },
   {
-    "name": "bacteria",
+    "name": "bacteria-3",
     "family": "osler",
     "styles": [
       "bold",
@@ -53125,7 +53125,7 @@
     "category": null
   },
   {
-    "name": "heart-1",
+    "name": "heart-anatomical",
     "family": "osler",
     "styles": [
       "bold",
@@ -58821,7 +58821,7 @@
     "category": null
   },
   {
-    "name": "spine",
+    "name": "spine-2",
     "family": "osler",
     "styles": [
       "bold",
@@ -59034,7 +59034,7 @@
     "category": null
   },
   {
-    "name": "stomach",
+    "name": "stomach-2",
     "family": "osler",
     "styles": [
       "bold",
@@ -59556,7 +59556,7 @@
     "category": null
   },
   {
-    "name": "tennis-1",
+    "name": "tennis-ball",
     "family": "osler",
     "styles": [
       "bold",
@@ -61610,6 +61610,20 @@
     "category": null
   },
   {
+    "name": "arrow-download",
+    "family": "sandow",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "aliases": [],
+    "category": null
+  },
+  {
     "name": "arrow-fat-down",
     "family": "sandow",
     "styles": [
@@ -62324,20 +62338,6 @@
     "category": null
   },
   {
-    "name": "arrow-upload-1",
-    "family": "sandow",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "aliases": [],
-    "category": null
-  },
-  {
     "name": "arrow-upload",
     "family": "sandow",
     "styles": [
@@ -62604,7 +62604,7 @@
     "category": null
   },
   {
-    "name": "bacteria",
+    "name": "bacteria-3",
     "family": "sandow",
     "styles": [
       "bold",
@@ -65227,7 +65227,7 @@
     "category": null
   },
   {
-    "name": "cloud-rain",
+    "name": "cloud-rain-2",
     "family": "sandow",
     "styles": [
       "bold",
@@ -68303,7 +68303,7 @@
     "category": null
   },
   {
-    "name": "heart-1",
+    "name": "heart-anatomical",
     "family": "sandow",
     "styles": [
       "bold",
@@ -74027,7 +74027,7 @@
     "category": null
   },
   {
-    "name": "spine",
+    "name": "spine-2",
     "family": "sandow",
     "styles": [
       "bold",
@@ -74240,7 +74240,7 @@
     "category": null
   },
   {
-    "name": "stomach",
+    "name": "stomach-2",
     "family": "sandow",
     "styles": [
       "bold",
@@ -74762,7 +74762,7 @@
     "category": null
   },
   {
-    "name": "tennis-1",
+    "name": "tennis-ball",
     "family": "sandow",
     "styles": [
       "bold",
@@ -76844,6 +76844,20 @@
     "category": null
   },
   {
+    "name": "arrow-download",
+    "family": "turing",
+    "styles": [
+      "bold",
+      "duoline",
+      "duotone",
+      "fill",
+      "light",
+      "regular"
+    ],
+    "aliases": [],
+    "category": null
+  },
+  {
     "name": "arrow-fat-down",
     "family": "turing",
     "styles": [
@@ -77614,20 +77628,6 @@
     "category": null
   },
   {
-    "name": "arrow-upload-1",
-    "family": "turing",
-    "styles": [
-      "bold",
-      "duoline",
-      "duotone",
-      "fill",
-      "light",
-      "regular"
-    ],
-    "aliases": [],
-    "category": null
-  },
-  {
     "name": "arrow-upload",
     "family": "turing",
     "styles": [
@@ -77894,7 +77894,7 @@
     "category": null
   },
   {
-    "name": "bacteria",
+    "name": "bacteria-3",
     "family": "turing",
     "styles": [
       "bold",
@@ -80629,7 +80629,7 @@
     "category": null
   },
   {
-    "name": "cloud-rain",
+    "name": "cloud-rain-2",
     "family": "turing",
     "styles": [
       "bold",
@@ -83691,7 +83691,7 @@
     "category": null
   },
   {
-    "name": "heart-1",
+    "name": "heart-anatomical",
     "family": "turing",
     "styles": [
       "bold",
@@ -89429,7 +89429,7 @@
     "category": null
   },
   {
-    "name": "spine",
+    "name": "spine-2",
     "family": "turing",
     "styles": [
       "bold",
@@ -89642,7 +89642,7 @@
     "category": null
   },
   {
-    "name": "stomach",
+    "name": "stomach-2",
     "family": "turing",
     "styles": [
       "bold",
@@ -90164,7 +90164,7 @@
     "category": null
   },
   {
-    "name": "tennis-1",
+    "name": "tennis-ball",
     "family": "turing",
     "styles": [
       "bold",

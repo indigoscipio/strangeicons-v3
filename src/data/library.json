@@ -1,6 +1,6 @@
 {
-  "siteVersion": "3.2",
-  "assetReleaseVersion": "3.2",
+  "siteVersion": "3.3",
+  "assetReleaseVersion": "3.3",
   "iconConceptCount": 6497,
   "iconVariantCount": 38982,
   "defaultFamily": "asklepios",
@@ -36,6 +36,6 @@
   ],
   "siteUrl": "https://strangeicons.com",
   "repositoryUrl": "https://github.com/indigoscipio/strangeicons-v3",
-  "releaseUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/tag/v3.2",
-  "downloadUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/download/v3.2/icons.zip"
+  "releaseUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/tag/v3.3",
+  "downloadUrl": "https://github.com/indigoscipio/strangeicons-v3/releases/download/v3.3/icons.zip"
 }
