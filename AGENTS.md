@@ -5,7 +5,7 @@
 - The current Astro website and visual design are working well. Prioritize reliability, search quality, naming consistency, maintainability, accessibility, and performance.
 - Do not redesign the interface, migrate frameworks, or introduce a monorepo unless explicitly requested.
 - Do not begin React or npm-package implementation during v3 cleanup work.
-- Intended progression: clean the v3 asset and release pipeline; improve search and discovery in v3.3; prepare SVG and naming infrastructure; introduce React distribution as the defining feature of v4.
+- Intended progression: clean the v3 asset and release pipeline; improve search and discovery in v3.2; deliver major icon additions and refinements in v3.3; prepare SVG and naming infrastructure; introduce React distribution as the defining feature of v4.
 
 ## Commands
 
