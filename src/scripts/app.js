@@ -103,6 +103,10 @@ function getTotalHeight() { return getRowCount() * CARD_HEIGHT; }
 
 function iconNameLabel(name) { return String(name).replace(/-/g, ' '); }
 
+function spriteUrl(key) {
+  return `/sprites/${key}.svg?v=${encodeURIComponent(library.assetReleaseVersion)}`;
+}
+
 function flashButton(btn, text) {
   if (btn._flashTimer) {
     clearTimeout(btn._flashTimer);
@@ -140,7 +144,7 @@ async function loadSprite(family, style) {
   if (spriteCache.has(key)) {
     symbols = spriteCache.get(key);
   } else {
-    const res = await fetch(`/sprites/${key}.svg`);
+    const res = await fetch(spriteUrl(key));
     if (!res.ok) throw new Error(`Failed to load sprite: ${key}`);
     const text = await res.text();
     const temp = document.createElement('div');
@@ -357,7 +361,7 @@ async function openPanel(icon, style) {
   // Ensure sprite is cached without swapping
   const key = `${icon.family}-${style}`;
   if (!spriteCache.has(key)) {
-    const res = await fetch(`/sprites/${key}.svg`);
+    const res = await fetch(spriteUrl(key));
     if (!res.ok) throw new Error(`Failed to load sprite: ${key}`);
     const text = await res.text();
     const temp = document.createElement('div');
